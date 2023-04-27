@@ -3,6 +3,7 @@ from dash import Dash, html, dcc, Input, Output, State
 import pandas as pd
 import plotly.graph_objects as go
 import os
+import mariadb
 
 # Font Awesome Icon's
 external_scripts = [{'src': 'https://kit.fontawesome.com/19f1c21c33.js',
@@ -87,7 +88,7 @@ app.callback(
 # Map
 
 # Access token
-token = os.environ['DB_PWD_TER']
+token = "pk.eyJ1IjoianB6cDIwMDEiLCJhIjoiY2xmcmEzNnhyMDNjdDNycXQ0d3A2N3NjbyJ9.PUJ_q_U96vOQ94oli7JT6g"
 
 # Map layout
 map_layout = dict(
@@ -104,17 +105,29 @@ map_layout = dict(
     hoverlabel_bgcolor="#000000"
 )
 
+# Connect to MariaDB Platform
+try:
+    conn = mariadb.connect(
+        user="root", password="root", host="localhost", port=3307, database="georregias"
+    )
+    cur = conn.cursor()
+except mariadb.Error as e:
+    print(f"Error connecting to MariaDB Platform: {e}")
+
 # Estaciones de Metro
 estaciones_metro = pd.read_csv("assets/estaciones_metro.csv")
 
 # Reportes
-reportes = pd.read_csv("assets/reportes.csv")
+cur.execute("SELECT SUBSTRING_INDEX(location,',', 1) AS lat, SUBSTR(location, POSITION(',' IN  location)+2, LENGTH(location)) AS lon FROM record WHERE type='911';")
+reportes = cur.fetchall()
 
 # Percepciones - Espacio inseguro y de peligro
-percepciones = pd.read_csv("assets/percepciones.csv")
+cur.execute("SELECT SUBSTRING_INDEX(location,',', 1) AS lat, SUBSTR(location, POSITION(',' IN  location)+2, LENGTH(location)) AS lon FROM record WHERE type='criminalidad';")
+percepciones = cur.fetchall()
 
 # Percepciones - Espacio seguro
-percepciones_seguro = pd.read_csv("assets/percepciones_seguro.csv")
+cur.execute("SELECT SUBSTRING_INDEX(location,',', 1) AS lat, SUBSTR(location, POSITION(',' IN  location)+2, LENGTH(location)) AS lon FROM record WHERE type='seguridad';")
+percepciones_seguro = cur.fetchall()
 
 # Map - Callback
 def on_form_change(switches_value):
@@ -141,8 +154,8 @@ def on_form_change(switches_value):
        #print("passed through (2)")
 
         reportes_mapa = go.Figure(go.Scattermapbox(
-            lon=reportes["longitud"],
-            lat=reportes["latitud"],
+            lon=list(map(lambda x: x[0], reportes)),
+            lat=list(map(lambda x: x[1], reportes)),
             marker={'size': 0, 'opacity': .1, 'color': '#4974a5'},
             cluster={
                 'enabled': True,
@@ -164,8 +177,8 @@ def on_form_change(switches_value):
         #print("passed through (3)")
 
         percepciones_mapa = go.Figure(go.Scattermapbox(
-            lon=percepciones["longitud"],
-            lat=percepciones["latitud"],
+            lon=list(map(lambda x: x[0], percepciones)),
+            lat=list(map(lambda x: x[1], percepciones)),
             marker={'size': 14, 'opacity': .7, 'color': '#A97BB5'},
             hoverinfo="none"
         ))
@@ -178,8 +191,8 @@ def on_form_change(switches_value):
         #print("passed through (4)")
 
         percepciones_seguro_mapa = go.Figure(go.Scattermapbox(
-            lon=percepciones_seguro["longitud"],
-            lat=percepciones_seguro["latitud"],
+            lon=list(map(lambda x: x[0], percepciones_seguro)),
+            lat=list(map(lambda x: x[1], percepciones_seguro)),
             marker={'size': 14, 'opacity': .7, 'color': '#8bb77f'},
             hoverinfo="none"
         ))
@@ -193,8 +206,8 @@ def on_form_change(switches_value):
 
         # Estaciones + Reportes
         estaciones_reportes = go.Figure(go.Scattermapbox(
-            lon=reportes["longitud"],
-            lat=reportes["latitud"],
+            lon=list(map(lambda x: x[0], reportes)),
+            lat=list(map(lambda x: x[1], reportes)),
             marker={'size': 0, 'opacity': .1, 'color': '#4974a5'},
             cluster={
                 'enabled': True,
@@ -223,8 +236,8 @@ def on_form_change(switches_value):
 
         # Estaciones + Percepciones
         estaciones_percepciones = go.Figure(go.Scattermapbox(
-            lon=percepciones["longitud"],
-            lat=percepciones["latitud"],
+            lon=list(map(lambda x: x[0], percepciones)),
+            lat=list(map(lambda x: x[1], percepciones)),
             marker={'size': 14, 'opacity': .7, 'color': '#A97BB5'},
             hoverinfo="none"
         ))
@@ -246,8 +259,8 @@ def on_form_change(switches_value):
 
         # Estaciones + Percepciones - Seguro
         estaciones_percepciones_seguro = go.Figure(go.Scattermapbox(
-            lon=percepciones_seguro["longitud"],
-            lat=percepciones_seguro["latitud"],
+            lon=list(map(lambda x: x[0], percepciones_seguro)),
+            lat=list(map(lambda x: x[1], percepciones_seguro)),
             marker={'size': 14, 'opacity': .7, 'color': '#8bb77f'},
             hoverinfo="none"
         ))
@@ -269,8 +282,8 @@ def on_form_change(switches_value):
 
         # Reportes + Percepciones
         reportes_percepciones = go.Figure(go.Scattermapbox(
-            lon=reportes["longitud"],
-            lat=reportes["latitud"],
+            lon=list(map(lambda x: x[0], reportes)),
+            lat=list(map(lambda x: x[1], reportes)),
             marker={'size': 0, 'opacity': .1, 'color': '#4974a5'},
             cluster={
                 'enabled': True,
@@ -283,8 +296,8 @@ def on_form_change(switches_value):
         ))
 
         reportes_percepciones.add_scattermapbox(
-            lon = percepciones["longitud"],
-            lat = percepciones["latitud"],
+            lon=list(map(lambda x: x[0], percepciones)),
+            lat=list(map(lambda x: x[1], percepciones)),
             marker = {'size': 14, 'opacity': .7, 'color': '#A97BB5'},
             hoverinfo = "none"
         )
@@ -298,8 +311,8 @@ def on_form_change(switches_value):
 
         # Reportes + Percepciones - Seguro
         reportes_percepciones_seguro = go.Figure(go.Scattermapbox(
-            lon = reportes["longitud"],
-            lat = reportes["latitud"],
+            lon=list(map(lambda x: x[0], reportes)),
+            lat=list(map(lambda x: x[1], reportes)),
             marker = {'size': 0, 'opacity': .1, 'color': '#4974a5'},
             cluster = {
                 'enabled': True,
@@ -312,8 +325,8 @@ def on_form_change(switches_value):
         ))
 
         reportes_percepciones_seguro.add_scattermapbox(
-            lon=percepciones_seguro["longitud"],
-            lat=percepciones_seguro["latitud"],
+            lon=list(map(lambda x: x[0], percepciones_seguro)),
+            lat=list(map(lambda x: x[1], percepciones_seguro)),
             marker={'size': 14, 'opacity': .7, 'color': '#8bb77f'},
             hoverinfo="none"
         )
@@ -327,15 +340,15 @@ def on_form_change(switches_value):
 
         # Ambas Percepciones
         percepciones_ambas = go.Figure(go.Scattermapbox(
-            lon=percepciones_seguro["longitud"],
-            lat=percepciones_seguro["latitud"],
+            lon=list(map(lambda x: x[0], percepciones_seguro)),
+            lat=list(map(lambda x: x[1], percepciones_seguro)),
             marker={'size': 14, 'opacity': .7, 'color': '#8bb77f'},
             hoverinfo="none"
         ))
 
         percepciones_ambas.add_scattermapbox(
-            lon=percepciones["longitud"],
-            lat=percepciones["latitud"],
+            lon=list(map(lambda x: x[0], percepciones)),
+            lat=list(map(lambda x: x[1], percepciones)),
             marker={'size': 14, 'opacity': .7, 'color': '#A97BB5'},
             hoverinfo="none"
         )
@@ -350,8 +363,8 @@ def on_form_change(switches_value):
 
         # Estaciones + Reportes + Percepciones
         estaciones_reportes_percepciones = go.Figure(go.Scattermapbox(
-            lon=reportes["longitud"],
-            lat=reportes["latitud"],
+            lon=list(map(lambda x: x[0], reportes)),
+            lat=list(map(lambda x: x[1], reportes)),
             marker={'size': 0, 'opacity': .1, 'color': '#4974a5'},
             cluster={
                 'enabled': True,
@@ -364,8 +377,8 @@ def on_form_change(switches_value):
         ))
 
         estaciones_reportes_percepciones.add_scattermapbox(
-            lon=percepciones["longitud"],
-            lat=percepciones["latitud"],
+            lon=list(map(lambda x: x[0], percepciones)),
+            lat=list(map(lambda x: x[1], percepciones)),
             marker={'size': 14, 'opacity': .7, 'color': '#A97BB5'},
             hoverinfo="none"
         )
@@ -388,8 +401,8 @@ def on_form_change(switches_value):
 
         # Estaciones + Reportes + Percepciones - Seguro
         estaciones_reportes_percepciones_seguro = go.Figure(go.Scattermapbox(
-            lon=reportes["longitud"],
-            lat=reportes["latitud"],
+            lon=list(map(lambda x: x[0], reportes)),
+            lat=list(map(lambda x: x[1], reportes)),
             marker={'size': 0, 'opacity': .1, 'color': '#4974a5'},
             cluster={
                 'enabled': True,
@@ -402,8 +415,8 @@ def on_form_change(switches_value):
         ))
 
         estaciones_reportes_percepciones_seguro.add_scattermapbox(
-            lon=percepciones_seguro["longitud"],
-            lat=percepciones_seguro["latitud"],
+            lon=list(map(lambda x: x[0], percepciones_seguro)),
+            lat=list(map(lambda x: x[1], percepciones_seguro)),
             marker={'size': 14, 'opacity': .7, 'color': '#8bb77f'},
             hoverinfo="none"
         )
@@ -427,15 +440,15 @@ def on_form_change(switches_value):
 
         # Estaciones + Ambas Percepciones
         estaciones_percepciones_ambas = go.Figure(go.Scattermapbox(
-            lon=percepciones_seguro["longitud"],
-            lat=percepciones_seguro["latitud"],
+            lon=list(map(lambda x: x[0], percepciones_seguro)),
+            lat=list(map(lambda x: x[1], percepciones_seguro)),
             marker={'size': 14, 'opacity': .7, 'color': '#8bb77f'},
             hoverinfo="none"
         ))
 
         estaciones_percepciones_ambas.add_scattermapbox(
-            lon=percepciones["longitud"],
-            lat=percepciones["latitud"],
+            lon=list(map(lambda x: x[0], percepciones)),
+            lat=list(map(lambda x: x[1], percepciones)),
             marker={'size': 14, 'opacity': .7, 'color': '#A97BB5'},
             hoverinfo="none"
         )
@@ -458,8 +471,8 @@ def on_form_change(switches_value):
 
         # Reportes + Ambas Percepciones
         reportes_percepciones_ambas = go.Figure(go.Scattermapbox(
-            lon=reportes["longitud"],
-            lat=reportes["latitud"],
+            lon=list(map(lambda x: x[0], reportes)),
+            lat=list(map(lambda x: x[1], reportes)),
             marker={'size': 0, 'opacity': .1, 'color': '#4974a5'},
             cluster={
                 'enabled': True,
@@ -472,15 +485,15 @@ def on_form_change(switches_value):
         ))
 
         reportes_percepciones_ambas.add_scattermapbox(
-            lon=percepciones_seguro["longitud"],
-            lat=percepciones_seguro["latitud"],
+            lon=list(map(lambda x: x[0], percepciones_seguro)),
+            lat=list(map(lambda x: x[1], percepciones_seguro)),
             marker={'size': 14, 'opacity': .7, 'color': '#8bb77f'},
             hoverinfo="none"
         )
 
         reportes_percepciones_ambas.add_scattermapbox(
-            lon=percepciones["longitud"],
-            lat=percepciones["latitud"],
+            lon=list(map(lambda x: x[0], percepciones)),
+            lat=list(map(lambda x: x[1], percepciones)),
             marker={'size': 14, 'opacity': .7, 'color': '#A97BB5'},
             hoverinfo="none"
         )
@@ -494,8 +507,8 @@ def on_form_change(switches_value):
 
         # Mapa - Todas
         mapa_todas = go.Figure(go.Scattermapbox(
-            lon=reportes["longitud"],
-            lat=reportes["latitud"],
+            lon=list(map(lambda x: x[0], reportes)),
+            lat=list(map(lambda x: x[1], reportes)),
             marker={'size': 0, 'opacity': .1, 'color': '#4974a5'},
             cluster={
                 'enabled': True,
@@ -508,15 +521,15 @@ def on_form_change(switches_value):
         ))
 
         mapa_todas.add_scattermapbox(
-            lon=percepciones_seguro["longitud"],
-            lat=percepciones_seguro["latitud"],
+            lon=list(map(lambda x: x[0], percepciones_seguro)),
+            lat=list(map(lambda x: x[1], percepciones_seguro)),
             marker={'size': 14, 'opacity': .7, 'color': '#8bb77f'},
             hoverinfo="none"
         )
 
         mapa_todas.add_scattermapbox(
-            lon=percepciones["longitud"],
-            lat=percepciones["latitud"],
+            lon=list(map(lambda x: x[0], percepciones)),
+            lat=list(map(lambda x: x[1], percepciones)),
             marker={'size': 14, 'opacity': .7, 'color': '#A97BB5'},
             hoverinfo="none"
         )
@@ -537,8 +550,8 @@ def on_form_change(switches_value):
         #print("passed through (0)")
 
         placeholder = go.Figure(go.Scattermapbox(
-            lon=percepciones["longitud"],
-            lat=percepciones["latitud"],
+            lon=list(map(lambda x: x[0], percepciones)),
+            lat=list(map(lambda x: x[1], percepciones)),
             marker={'size': 0, 'opacity': .5, 'color': '#E2474B'},
             hoverinfo="none"
         ))
@@ -559,3 +572,5 @@ app.callback(
 
 if __name__ == '__main__':
     app.run_server(debug=True)
+
+conn.close()
