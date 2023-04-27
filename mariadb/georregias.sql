@@ -210,7 +210,7 @@ DELIMITER ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `obtain_records`()
 BEGIN
-	SELECT record.id,type,location,time,IFNULL(email,'Chatbot') AS added_by FROM record LEFT JOIN admin ON record.added_by=admin.id;
+	SELECT record.id,type,location,time,IFNULL(email,'Chatbot') AS added_by FROM record LEFT JOIN admin ON record.added_by=admin.id ORDER BY time DESC;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
