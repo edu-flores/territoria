@@ -66,7 +66,7 @@ layout = dbc.Container([
             html.B("¿Quieres ayudarnos a generar espacios seguros para todas y todes?")
         , style={"fontSize": "20px"}, lg=11
         )
-    ], class_name="pt-4 pb-2", justify="center", style={"backgroundColor":"#F6F8FA", "text-align": "center"}
+    ], class_name="pt-4 pb-2", justify="center", style={"backgroundColor":"#F6F8FA", "textAlign": "center"}
     ),
 
     dbc.Row([
@@ -94,7 +94,7 @@ layout = dbc.Container([
         ], lg=11
         )
 
-    ], class_name="pt-2 pb-3", justify="center", style={"backgroundColor":"#F6F8FA", "text-align": "center"}
+    ], class_name="pt-2 pb-3", justify="center", style={"backgroundColor":"#F6F8FA", "textAlign": "center"}
     ),
 
 
