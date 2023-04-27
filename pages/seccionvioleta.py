@@ -55,7 +55,7 @@ layout = dbc.Container([
                        style={"color": "#A777B1"}, target="_blank")
             ])
             ,
-        ], style={"font-size": "22px"}, lg=11
+        ], style={"fontSize": "22px"}, lg=11
         )
 
     ], class_name="pt-4 pb-5", justify="center"
@@ -64,37 +64,37 @@ layout = dbc.Container([
     dbc.Row([
         dbc.Col(
             html.B("¿Quieres ayudarnos a generar espacios seguros para todas y todes?")
-        , style={"font-size": "20px"}, lg=11
+        , style={"fontSize": "20px"}, lg=11
         )
-    ], class_name="pt-4 pb-2", justify="center", style={"background-color":"#F6F8FA", "text-align": "center"}
+    ], class_name="pt-4 pb-2", justify="center", style={"backgroundColor":"#F6F8FA", "text-align": "center"}
     ),
 
     dbc.Row([
         dbc.Col([
             html.P(
                 "Envíanos un mensaje o correo y platiquemos 💜"
-            , style={"font-size": "18px"}
+            , style={"fontSize": "18px"}
             ),
             html.P([
                 "Instagram: ",
                 html.A(" georregias", href="https://www.instagram.com/georregias", style={"color": "#A777B1"},
                        target="_blank")
-            ], style={"font-size": "16px"}
+            ], style={"fontSize": "16px"}
             ),
             html.P([
                 "Facebook: ",
                 html.A(" Georregias", href="https://www.facebook.com/Georregias", style={"color": "#A777B1"},
                        target="_blank")
-            ], style={"font-size": "16px"}
+            ], style={"fontSize": "16px"}
             ),
             html.P(
                 "Correo: georregias@gmail.com"
-                , style={"font-size": "16px"}
+                , style={"fontSize": "16px"}
             )
         ], lg=11
         )
 
-    ], class_name="pt-2 pb-3", justify="center", style={"background-color":"#F6F8FA", "text-align": "center"}
+    ], class_name="pt-2 pb-3", justify="center", style={"backgroundColor":"#F6F8FA", "text-align": "center"}
     ),
 
 

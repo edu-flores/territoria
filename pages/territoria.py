@@ -119,8 +119,8 @@ layout = html.Div([
                             href="https://drive.google.com/file/d/19SiUAV-BB0WWd54x-h_HUlszXqKOTKcN/view?usp=sharing",
                             target="_blank"
                         ),
-                        html.Hr(),
                     ]),
+                    html.Hr(),
                     html.Div(switches_movil, id="radioitems-checklist-output")
                 ],
                 id="offcanvas",
@@ -152,10 +152,10 @@ layout = html.Div([
                     href="https://drive.google.com/file/d/19SiUAV-BB0WWd54x-h_HUlszXqKOTKcN/view?usp=sharing",
                     target="_blank"
                 ),
-                html.Hr()
             ],
                 className = "px-4"
             ),
+            html.Hr(),
             html.Div(
                 switches_desktop,
                 id="radioitems-checklist-output",
