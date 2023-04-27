@@ -1,0 +1,347 @@
+/*Page title*/
+.title{
+    text-align:center;
+    font-size:40px;
+    margin-bottom: 20px;
+    margin-top:20px;
+}
+
+/*Button*/
+.submit_btn,.submit_btn:disabled{
+    background-color: #8D65C5;
+    border: 1px solid #8D65C5;
+    font-weight: 600;
+    font-size:16px;
+    height: 50px;
+    color:white;
+}
+
+.submit_btn:hover, .submit_btn:active{
+    background-color:#724CA9 !important;
+    border: 1px solid #724CA9;
+    color:white;
+}
+
+.cancel_btn{
+    background-color:#9f9ea2;
+    border:1px solid #9f9ea2 ;
+    font-weight: 600;
+    font-size:16px;
+    height: 50px;
+    color: white !important;
+    width:95px;
+    margin-left:10px;
+}
+
+.cancel_btn:hover,.cancel_btn:active{
+    background-color:#868587 !important;
+}
+
+/*Labels of form fields*/
+.form_label{
+    font-weight:700;
+    font-size:16px;
+}
+
+.nav_margin_top{
+    margin-top:5px;
+}
+
+/*Center text*/
+.text_center{
+    text-align:center;
+}
+
+/*Margin 20px*/
+.margin{
+    margin-top:20px;
+    margin-bottom:20px;
+}
+
+.center_div{
+  margin:auto;
+
+}
+
+
+.margin_bottom_20{
+    margin-bottom:20px !important;
+}
+
+/*LOGIN PAGE*/
+
+input{
+    font-size:16px;
+}
+
+/*Form fields*/
+.form_field_login, .form_field_password_recovery, .form_field_password_restore{
+    height: 60px;
+    margin: auto;
+}
+
+/*Login form div*/
+.login_form_div,.password_recovery_page_div,.restore_password_main_div{
+    margin:auto;
+    width:450px;
+    margin-top:50px;
+}
+
+.password_input_div{
+    margin-bottom:5px !important;
+}
+
+.btn_margin{
+    margin-top:20px;
+    margin-bottom:20px;
+}
+
+.margin_bottom_20{
+    margin-bottom:20px;
+}
+
+.bad_c_alert{
+    margin-top:5px;
+}
+
+/*Password recovery link*/
+.password_recovery_link, .home_link{
+    font-size: 15px;
+    color:#8D65C5;
+    text-align: center;
+}
+
+.password_recovery_div{
+    text-align: center;
+    margin-left:auto;
+    margin-right:auto;
+}
+
+.password_recovery_link:hover, .password_recovery_link:active,.record_link:hover,.record_link:active, .home_link:active, .home_link:hover{
+    color:#724CA9 !important;
+}
+
+
+/*Index*/
+
+/*Form fields*/
+.form_field_record{
+    height: 40px !important;
+    margin-top:auto;
+    margin-bottom:auto;
+    margin-left:auto;
+    margin-right: auto;
+}
+
+
+.margin_7{
+  margin-bottom:7px;
+}
+
+ /*Main div*/
+.index_div{
+    margin-bottom:20px;
+    margin-left:auto;
+    margin-right:auto;
+    width:85%;
+}
+
+.index_buttons_div{
+    text-align:end;
+}
+
+
+.sign_out_btn{
+    text-decoration: none;
+    font-size: var(--bs-nav-link-font-size);
+    font-weight: var(--bs-nav-link-font-weight)!important;
+    color: var(--bs-nav-link-color) !important;
+    border:none;
+    background-color: white;
+
+}
+
+.sign_out_btn:hover, .sign_out_btn:active{
+   color:#4C4C4C;
+}
+
+table{
+    text-align: center;
+    justify-content: center;
+    margin:auto;
+}
+
+#table{
+    margin:auto;
+    width:85%;
+}
+
+th{
+    background-color: #57348E !important;
+    color:white;
+    height:35px !important; 
+    font-size:16px !important;
+}
+
+td{
+    height:45px;
+    background-color:#E2E0E7;
+    font-size:15px;
+}
+
+.delete_record_btn{
+    color:#ae1d27;
+    text-decoration: none;
+    border:none;
+    background-color:white !important;
+}
+
+.delete_record_btn:hover, .delete_record_btn:active{
+    color:#d42430;
+}
+
+
+i{
+    color:white;
+    font-size:12px;
+}
+
+
+.center{
+    text-align:center;
+}
+
+.password_recovery_legend{
+    font-size:16px;
+    margin-bottom:0px;
+    text-align:center;
+}
+
+
+/*PAGE NOT FOUND*/
+.title_404{
+    margin-top:150px;
+}
+
+
+.div_404{
+    width:60%;
+    margin-left:auto;
+    margin-right:auto;
+    text-align:center;
+}
+
+.notice{
+    font-size:24px;
+    margin-bottom:20px;
+}
+
+.navbar{
+    margin-top:0px !important;
+    height:55px !important;
+}
+
+.margin_top_table{
+    margin-top:70px;
+}
+
+
+.delete_div{
+    text-align: center;
+    margin:auto;
+    width:450px;
+    margin-top:50px;
+}
+
+
+.delete_p{
+    font-size:18px;
+    margin-bottom:40px;
+}
+
+
+.restore_password_form_div{
+    display:flex;
+    flex-direction:column;
+    margin:auto;
+}
+
+
+.restore_password_buttons_div{
+    text-align:center;
+    margin:auto;
+}
+
+.restore_password_input{
+    width:100%;
+    border-radius:5px;
+    border:1px solid #dadfe3;
+}
+
+.margin_16{
+    margin-bottom:16px;
+  }
+
+
+.restore_password_button{
+    margin-top:37px;
+    width:95px;
+}
+
+.restore_password_input::placeholder {
+    padding-left:10px;
+   
+ }
+
+.head_margin{
+    margin-top:0px !important;
+}
+
+.template_label{
+    margin-bottom:8px;
+}
+/*MEDIA QUERIES*/
+
+/*LOGIN*/
+
+@media (max-width: 576px) {
+  .login_form_div, .password_recovery_page_div,.restore_password_form_div, .restore_password_main_div{
+    width:70% ;
+  }
+  .index_buttons_div{
+    text-align:center;
+   }
+   th{
+    font-size:10px  !important;
+   }
+   td{
+    font-size:10px !important;
+   }
+   table{
+        max-width: none;
+        table-layout: fixed;
+        word-wrap: break-word;
+   }
+   
+}
+
+
+@media(max-width:768px){
+    th{
+        font-size:13px  !important;
+       }
+    td{
+        font-size:12px  !important;
+    }
+    .index_div{
+        width:100%;
+    }
+
+}
+
+
+@media(min-width:768px){
+    .shrink{
+        width:600px!important;
+    }
+}
