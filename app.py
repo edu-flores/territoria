@@ -118,8 +118,7 @@ except mariadb.Error as e:
 estaciones_metro = pd.read_csv("assets/estaciones_metro.csv")
 
 # Reportes
-cur.execute("SELECT SUBSTRING_INDEX(location,',', 1) AS lat, SUBSTR(location, POSITION(',' IN  location)+2, LENGTH(location)) AS lon FROM record WHERE type='911';")
-reportes = cur.fetchall()
+reportes = pd.read_csv("assets/reportes.csv")
 
 # Percepciones - Espacio inseguro y de peligro
 cur.execute("SELECT SUBSTRING_INDEX(location,',', 1) AS lat, SUBSTR(location, POSITION(',' IN  location)+2, LENGTH(location)) AS lon FROM record WHERE type='criminalidad';")
@@ -154,17 +153,15 @@ def on_form_change(switches_value):
        #print("passed through (2)")
 
         reportes_mapa = go.Figure(go.Scattermapbox(
-            lon=list(map(lambda x: x[1], reportes)),
-            lat=list(map(lambda x: x[0], reportes)),
+            lon=reportes["longitud"],
+            lat=reportes["latitud"],
             marker={'size': 0, 'opacity': .1, 'color': '#4974a5'},
             cluster={
-                'enabled': True,
                 'size': [12, 15, 18, 21, 24, 27, 30, 33, 36, 39, 42, 45, 48, 51, 54, 57, 60, 69, 78],
                 "step": [60, 120, 180, 240, 300, 360, 420, 480, 540, 600, 660, 720, 780, 840, 900, 960, 1020, 2100,
                          5200],
                 # "step": [50, 200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3500,
                 #          4000, 4500, 5000],
-                'color': '#4974a5',
                 'opacity': .3
             }
         ))
@@ -206,15 +203,13 @@ def on_form_change(switches_value):
 
         # Estaciones + Reportes
         estaciones_reportes = go.Figure(go.Scattermapbox(
-            lon=list(map(lambda x: x[1], reportes)),
-            lat=list(map(lambda x: x[0], reportes)),
+            lon=reportes["longitud"],
+            lat=reportes["latitud"],
             marker={'size': 0, 'opacity': .1, 'color': '#4974a5'},
             cluster={
-                'enabled': True,
                 'size': [12, 15, 18, 21, 24, 27, 30, 33, 36, 39, 42, 45, 48, 51, 54, 57, 60, 69, 78],
                 "step": [60, 120, 180, 240, 300, 360, 420, 480, 540, 600, 660, 720, 780, 840, 900, 960, 1020, 2100,
                          5200],
-                'color': '#4974a5',
                 'opacity': .3
             }
         ))
@@ -282,15 +277,13 @@ def on_form_change(switches_value):
 
         # Reportes + Percepciones
         reportes_percepciones = go.Figure(go.Scattermapbox(
-            lon=list(map(lambda x: x[1], reportes)),
-            lat=list(map(lambda x: x[0], reportes)),
+            lon=reportes["longitud"],
+            lat=reportes["latitud"],
             marker={'size': 0, 'opacity': .1, 'color': '#4974a5'},
             cluster={
-                'enabled': True,
                 'size': [12, 15, 18, 21, 24, 27, 30, 33, 36, 39, 42, 45, 48, 51, 54, 57, 60, 69, 78],
                 "step": [60, 120, 180, 240, 300, 360, 420, 480, 540, 600, 660, 720, 780, 840, 900, 960, 1020, 2100,
                          5200],
-                'color': '#4974a5',
                 'opacity': .3
             }
         ))
@@ -311,15 +304,13 @@ def on_form_change(switches_value):
 
         # Reportes + Percepciones - Seguro
         reportes_percepciones_seguro = go.Figure(go.Scattermapbox(
-            lon=list(map(lambda x: x[1], reportes)),
-            lat=list(map(lambda x: x[0], reportes)),
+            lon=reportes["longitud"],
+            lat=reportes["latitud"],
             marker = {'size': 0, 'opacity': .1, 'color': '#4974a5'},
             cluster = {
-                'enabled': True,
                 'size': [12, 15, 18, 21, 24, 27, 30, 33, 36, 39, 42, 45, 48, 51, 54, 57, 60, 69, 78],
                 "step": [60, 120, 180, 240, 300, 360, 420, 480, 540, 600, 660, 720, 780, 840, 900, 960, 1020, 2100,
                          5200],
-                'color': '#4974a5',
                 'opacity': .3
             }
         ))
@@ -363,15 +354,13 @@ def on_form_change(switches_value):
 
         # Estaciones + Reportes + Percepciones
         estaciones_reportes_percepciones = go.Figure(go.Scattermapbox(
-            lon=list(map(lambda x: x[1], reportes)),
-            lat=list(map(lambda x: x[0], reportes)),
+            lon=reportes["longitud"],
+            lat=reportes["latitud"],
             marker={'size': 0, 'opacity': .1, 'color': '#4974a5'},
             cluster={
-                'enabled': True,
                 'size': [12, 15, 18, 21, 24, 27, 30, 33, 36, 39, 42, 45, 48, 51, 54, 57, 60, 69, 78],
                 "step": [60, 120, 180, 240, 300, 360, 420, 480, 540, 600, 660, 720, 780, 840, 900, 960, 1020, 2100,
                          5200],
-                'color': '#4974a5',
                 'opacity': .3
             }
         ))
@@ -401,15 +390,13 @@ def on_form_change(switches_value):
 
         # Estaciones + Reportes + Percepciones - Seguro
         estaciones_reportes_percepciones_seguro = go.Figure(go.Scattermapbox(
-            lon=list(map(lambda x: x[1], reportes)),
-            lat=list(map(lambda x: x[0], reportes)),
+            lon=reportes["longitud"],
+            lat=reportes["latitud"],
             marker={'size': 0, 'opacity': .1, 'color': '#4974a5'},
             cluster={
-                'enabled': True,
                 'size': [12, 15, 18, 21, 24, 27, 30, 33, 36, 39, 42, 45, 48, 51, 54, 57, 60, 69, 78],
                 "step": [60, 120, 180, 240, 300, 360, 420, 480, 540, 600, 660, 720, 780, 840, 900, 960, 1020, 2100,
                          5200],
-                'color': '#4974a5',
                 'opacity': .3
             }
         ))
@@ -471,15 +458,13 @@ def on_form_change(switches_value):
 
         # Reportes + Ambas Percepciones
         reportes_percepciones_ambas = go.Figure(go.Scattermapbox(
-            lon=list(map(lambda x: x[1], reportes)),
-            lat=list(map(lambda x: x[0], reportes)),
+            lon=reportes["longitud"],
+            lat=reportes["latitud"],
             marker={'size': 0, 'opacity': .1, 'color': '#4974a5'},
             cluster={
-                'enabled': True,
                 'size': [12, 15, 18, 21, 24, 27, 30, 33, 36, 39, 42, 45, 48, 51, 54, 57, 60, 69, 78],
                 "step": [60, 120, 180, 240, 300, 360, 420, 480, 540, 600, 660, 720, 780, 840, 900, 960, 1020, 2100,
                          5200],
-                'color': '#4974a5',
                 'opacity': .3
             }
         ))
@@ -507,15 +492,13 @@ def on_form_change(switches_value):
 
         # Mapa - Todas
         mapa_todas = go.Figure(go.Scattermapbox(
-            lon=list(map(lambda x: x[1], reportes)),
-            lat=list(map(lambda x: x[0], reportes)),
+            lon=reportes["longitud"],
+            lat=reportes["latitud"],
             marker={'size': 0, 'opacity': .1, 'color': '#4974a5'},
             cluster={
-                'enabled': True,
                 'size': [12, 15, 18, 21, 24, 27, 30, 33, 36, 39, 42, 45, 48, 51, 54, 57, 60, 69, 78],
                 "step": [60, 120, 180, 240, 300, 360, 420, 480, 540, 600, 660, 720, 780, 840, 900, 960, 1020, 2100,
                          5200],
-                'color': '#4974a5',
                 'opacity': .3
             }
         ))
