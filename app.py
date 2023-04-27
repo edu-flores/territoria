@@ -156,14 +156,7 @@ def on_form_change(switches_value):
             lon=reportes["longitud"],
             lat=reportes["latitud"],
             marker={'size': 0, 'opacity': .1, 'color': '#4974a5'},
-            cluster={
-                'size': [12, 15, 18, 21, 24, 27, 30, 33, 36, 39, 42, 45, 48, 51, 54, 57, 60, 69, 78],
-                "step": [60, 120, 180, 240, 300, 360, 420, 480, 540, 600, 660, 720, 780, 840, 900, 960, 1020, 2100,
-                         5200],
-                # "step": [50, 200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800, 3000, 3500,
-                #          4000, 4500, 5000],
-                'opacity': .3
-            }
+            cluster={'opacity': .3}
         ))
 
         reportes_mapa.update_layout(map_layout)
@@ -206,12 +199,7 @@ def on_form_change(switches_value):
             lon=reportes["longitud"],
             lat=reportes["latitud"],
             marker={'size': 0, 'opacity': .1, 'color': '#4974a5'},
-            cluster={
-                'size': [12, 15, 18, 21, 24, 27, 30, 33, 36, 39, 42, 45, 48, 51, 54, 57, 60, 69, 78],
-                "step": [60, 120, 180, 240, 300, 360, 420, 480, 540, 600, 660, 720, 780, 840, 900, 960, 1020, 2100,
-                         5200],
-                'opacity': .3
-            }
+            cluster={'opacity': .3}
         ))
 
         estaciones_reportes.add_scattermapbox(
@@ -280,12 +268,7 @@ def on_form_change(switches_value):
             lon=reportes["longitud"],
             lat=reportes["latitud"],
             marker={'size': 0, 'opacity': .1, 'color': '#4974a5'},
-            cluster={
-                'size': [12, 15, 18, 21, 24, 27, 30, 33, 36, 39, 42, 45, 48, 51, 54, 57, 60, 69, 78],
-                "step": [60, 120, 180, 240, 300, 360, 420, 480, 540, 600, 660, 720, 780, 840, 900, 960, 1020, 2100,
-                         5200],
-                'opacity': .3
-            }
+            cluster={'opacity': .3}
         ))
 
         reportes_percepciones.add_scattermapbox(
@@ -306,13 +289,8 @@ def on_form_change(switches_value):
         reportes_percepciones_seguro = go.Figure(go.Scattermapbox(
             lon=reportes["longitud"],
             lat=reportes["latitud"],
-            marker = {'size': 0, 'opacity': .1, 'color': '#4974a5'},
-            cluster = {
-                'size': [12, 15, 18, 21, 24, 27, 30, 33, 36, 39, 42, 45, 48, 51, 54, 57, 60, 69, 78],
-                "step": [60, 120, 180, 240, 300, 360, 420, 480, 540, 600, 660, 720, 780, 840, 900, 960, 1020, 2100,
-                         5200],
-                'opacity': .3
-            }
+            marker={'size': 0, 'opacity': .1, 'color': '#4974a5'},
+            cluster={'opacity': .3}
         ))
 
         reportes_percepciones_seguro.add_scattermapbox(
@@ -357,12 +335,7 @@ def on_form_change(switches_value):
             lon=reportes["longitud"],
             lat=reportes["latitud"],
             marker={'size': 0, 'opacity': .1, 'color': '#4974a5'},
-            cluster={
-                'size': [12, 15, 18, 21, 24, 27, 30, 33, 36, 39, 42, 45, 48, 51, 54, 57, 60, 69, 78],
-                "step": [60, 120, 180, 240, 300, 360, 420, 480, 540, 600, 660, 720, 780, 840, 900, 960, 1020, 2100,
-                         5200],
-                'opacity': .3
-            }
+            cluster={'opacity': .3}
         ))
 
         estaciones_reportes_percepciones.add_scattermapbox(
@@ -393,12 +366,7 @@ def on_form_change(switches_value):
             lon=reportes["longitud"],
             lat=reportes["latitud"],
             marker={'size': 0, 'opacity': .1, 'color': '#4974a5'},
-            cluster={
-                'size': [12, 15, 18, 21, 24, 27, 30, 33, 36, 39, 42, 45, 48, 51, 54, 57, 60, 69, 78],
-                "step": [60, 120, 180, 240, 300, 360, 420, 480, 540, 600, 660, 720, 780, 840, 900, 960, 1020, 2100,
-                         5200],
-                'opacity': .3
-            }
+            cluster={'opacity': .3}
         ))
 
         estaciones_reportes_percepciones_seguro.add_scattermapbox(
@@ -461,12 +429,7 @@ def on_form_change(switches_value):
             lon=reportes["longitud"],
             lat=reportes["latitud"],
             marker={'size': 0, 'opacity': .1, 'color': '#4974a5'},
-            cluster={
-                'size': [12, 15, 18, 21, 24, 27, 30, 33, 36, 39, 42, 45, 48, 51, 54, 57, 60, 69, 78],
-                "step": [60, 120, 180, 240, 300, 360, 420, 480, 540, 600, 660, 720, 780, 840, 900, 960, 1020, 2100,
-                         5200],
-                'opacity': .3
-            }
+            cluster={'opacity': .3}
         ))
 
         reportes_percepciones_ambas.add_scattermapbox(
@@ -495,12 +458,7 @@ def on_form_change(switches_value):
             lon=reportes["longitud"],
             lat=reportes["latitud"],
             marker={'size': 0, 'opacity': .1, 'color': '#4974a5'},
-            cluster={
-                'size': [12, 15, 18, 21, 24, 27, 30, 33, 36, 39, 42, 45, 48, 51, 54, 57, 60, 69, 78],
-                "step": [60, 120, 180, 240, 300, 360, 420, 480, 540, 600, 660, 720, 780, 840, 900, 960, 1020, 2100,
-                         5200],
-                'opacity': .3
-            }
+            cluster={'opacity': .3}
         ))
 
         mapa_todas.add_scattermapbox(
