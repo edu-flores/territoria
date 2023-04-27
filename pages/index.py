@@ -151,7 +151,9 @@ layout = dbc.Container([
 
             dbc.Collapse(
                 dbc.Nav([
-                    dbc.NavItem(dbc.Button("Cerrar sesión", color="link", id="sign_out_button", n_clicks=0, className="sign_out_btn")),
+                    dbc.NavItem(dbc.NavLink("Cerrar sesión", href="/login", id="sign_out_button", n_clicks=0)),
+                    dbc.NavItem(dbc.NavLink("Territoria", href="/territoria")),
+                    dbc.NavItem(dbc.NavLink("Sección Violeta", href="/seccionvioleta"))
                 ], className="ms-auto", navbar=True),
                 id="navbar-collapse", navbar=True,
             )       

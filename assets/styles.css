@@ -158,7 +158,7 @@ input{
     color: var(--bs-nav-link-color) !important;
     border:none;
     background-color: white;
-
+    cursor: pointer;
 }
 
 .sign_out_btn:hover, .sign_out_btn:active{
