@@ -109,7 +109,7 @@ layout = html.Div([
             dbc.Offcanvas(
                 [
                     html.P(
-                        "Territoria es un mapa que visualiza los datos oficiales de violencia de género a"
+                        "Territoria es un mapa que visualiza los datos oficiales de violencia de género a "
                         "partir de las llamadas del 911 y la percepción de seguridad de las mujeres en el espacio "
                         "público."
                     ),
@@ -142,7 +142,7 @@ layout = html.Div([
         dbc.Col([
             html.H4("Territoria", className = "px-4 pt-3"),
             html.P(
-                "Territoria es un mapa que visualiza los datos oficiales de violencia de género a"
+                "Territoria es un mapa que visualiza los datos oficiales de violencia de género a "
                 "partir de las llamadas del 911 y la percepción de seguridad de las mujeres en el espacio "
                 "público.", className = "px-4"
             ),
