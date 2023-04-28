@@ -1,8 +1,7 @@
 import dash
-from dash import Dash, html, dcc, Input, Output, State
+from dash import Dash, html, dcc, Input, Output, State, ctx
 import pandas as pd
 import plotly.graph_objects as go
-import os
 import mariadb
 from flask import (
     Flask,
@@ -14,12 +13,9 @@ from flask import (
     redirect,
     url_for,
 )
-from dash.dependencies import Input, Output, State
 from dash.exceptions import PreventUpdate
 import dash_bootstrap_components as dbc
 import time
-from flask import Flask, render_template
-from dash import ctx
 
 # Font Awesome Icon's
 external_scripts = [{'src': 'https://kit.fontawesome.com/19f1c21c33.js',
@@ -129,7 +125,7 @@ map_layout = dict(
     mapbox={
         'accesstoken': token,
         'style': 'streets',
-        'zoom': 13,
+        'zoom': 12,
         'center': dict(lat=25.675456439828732, lon=-100.31115409182688)
     },
     showlegend=False,
@@ -163,6 +159,8 @@ cur.execute("SELECT SUBSTRING_INDEX(location,',', 1) AS lat, SUBSTR(location, PO
 percepciones_seguro = cur.fetchall()
 
 # Map - Callback
+@app.callback(Output("mapa-movil", "figure"), [Input("switches-input-movil", "value")])
+@app.callback(Output("mapa-desktop", "figure"), [Input("switches-input-desktop", "value")])
 def on_form_change(switches_value):
 
     #print(switches_value)
@@ -534,17 +532,6 @@ def on_form_change(switches_value):
         placeholder.update_layout(map_layout)
 
         return placeholder
-
-app.callback(
-    Output("mapa-movil", "figure"),
-    Input("switches-input-movil", "value")
-)(on_form_change)
-
-app.callback(
-    Output("mapa-desktop", "figure"),
-    Input("switches-input-desktop", "value")
-)(on_form_change)
-
 
 
 #ACCESING PAGES
