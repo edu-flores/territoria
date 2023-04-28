@@ -128,11 +128,12 @@ map_layout = dict(
         'zoom': 12,
         'center': dict(lat=25.675456439828732, lon=-100.31115409182688)
     },
+    mapbox_bounds={'west': -100.5, 'east': -100, 'south': 25.5, 'north': 26},
     showlegend=False,
     margin={'l': 0, 'r': 0, 'b': 0, 't': 0},
-    modebar=dict(remove=["zoom", "toimage", "pan", "select", "lasso", "zoomin", "zoomout", "autoscale", "reset",
-                         "resetscale", "resetview"]),
-    hoverlabel_bgcolor="#000000"
+    modebar=dict(remove=['zoom', 'toimage', 'pan', 'select', 'lasso', 'zoomin', 'zoomout', 'autoscale', 'reset',
+                         'resetscale', 'resetview']),
+    hoverlabel_bgcolor='#000000'
 )
 
 # Connect to MariaDB Platform
