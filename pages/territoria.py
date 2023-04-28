@@ -188,7 +188,7 @@ layout = html.Div([
                     href="https://t.me/monterrey_watchdog_bot",
                     target="_blank",
                     className="rounded d-inline-block px-4 py-2",
-                    style={'margin-top': '32px', 'backgroundColor': '#a876b1', 'color': 'white'}
+                    style={'marginTop': '32px', 'backgroundColor': '#a876b1', 'color': 'white'}
                 ),
                 className="text-center",
             )

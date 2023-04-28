@@ -55,6 +55,14 @@ layout = dbc.Container([
 
             dbc.NavbarToggler(id="navbar-toggler", n_clicks=0),
 
+            dbc.Collapse(
+                dbc.Nav([
+                    dbc.NavItem(dbc.NavLink("Territoria", href="/territoria")),
+                    dbc.NavItem(dbc.NavLink("Sección Violeta", href="/seccionvioleta"))
+                ], className="ms-auto", navbar=True),
+                id="navbar-collapse", navbar=True,
+            )
+
         ]), color="#FFFFFF", dark=False, className="head_margin"
     ),
     
