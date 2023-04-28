@@ -13,8 +13,8 @@ type_input = html.Div(
             id="type",
             placeholder="Selecciona un tipo",
             options=[
-                {"label": "Criminalidad", "value": "criminalidad"},
-                {"label": "Seguridad", "value": "seguridad"},
+                {"label": "Inseguro", "value": "inseguro"},
+                {"label": "Seguro", "value": "seguro"},
             ],
             className="form_field_record",
             style={'height': 40, 'fontSize': 16}
@@ -64,8 +64,8 @@ type_filter_input = html.Div(
             id="type_filter",
             placeholder="Cualquiera",
             options=[
-                {"label": "Criminalidad", "value": "criminalidad"},
-                {"label": "Seguridad", "value": "seguridad"},
+                {"label": "Inseguro", "value": "inseguro"},
+                {"label": "Seguro", "value": "seguro"},
             ],
             className="form_field_record",
             style={'height': 40, 'fontSize': 16}

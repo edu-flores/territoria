@@ -128,7 +128,7 @@ map_layout = dict(
         'zoom': 12,
         'center': dict(lat=25.675456439828732, lon=-100.31115409182688)
     },
-    mapbox_bounds={'west': -100.5, 'east': -100.1, 'south': 25.5, 'north': 25.9},
+    mapbox_bounds={'west': -100.6, 'east': -100.1, 'south': 25.5, 'north': 25.9},
     showlegend=False,
     margin={'l': 0, 'r': 0, 'b': 0, 't': 0},
     modebar=dict(remove=['zoom', 'toimage', 'pan', 'select', 'lasso', 'zoomin', 'zoomout', 'autoscale', 'reset',
@@ -152,11 +152,11 @@ except mariadb.Error as e:
 reportes = pd.read_csv("assets/reportes.csv")
 
 # Percepciones - Espacio inseguro y de peligro
-cur.execute("SELECT SUBSTRING_INDEX(location,',', 1) AS lat, SUBSTR(location, POSITION(',' IN  location)+2, LENGTH(location)) AS lon FROM record WHERE type='criminalidad';")
+cur.execute("SELECT SUBSTRING_INDEX(location,',', 1) AS lat, SUBSTR(location, POSITION(',' IN  location)+2, LENGTH(location)) AS lon FROM record WHERE type='inseguro';")
 percepciones = cur.fetchall()
 
 # Percepciones - Espacio seguro
-cur.execute("SELECT SUBSTRING_INDEX(location,',', 1) AS lat, SUBSTR(location, POSITION(',' IN  location)+2, LENGTH(location)) AS lon FROM record WHERE type='seguridad';")
+cur.execute("SELECT SUBSTRING_INDEX(location,',', 1) AS lat, SUBSTR(location, POSITION(',' IN  location)+2, LENGTH(location)) AS lon FROM record WHERE type='seguro';")
 percepciones_seguro = cur.fetchall()
 
 mapa = go.Figure(go.Scattermapbox())
