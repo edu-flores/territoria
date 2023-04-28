@@ -145,7 +145,7 @@ except mariadb.Error as e:
     print(f"Error connecting to MariaDB Platform: {e}")
 
 # Estaciones de Metro
-estaciones_metro = pd.read_csv("assets/estaciones_metro.csv")
+# estaciones_metro = pd.read_csv("assets/estaciones_metro.csv")
 
 # Reportes
 reportes = pd.read_csv("assets/reportes.csv")
@@ -158,381 +158,45 @@ percepciones = cur.fetchall()
 cur.execute("SELECT SUBSTRING_INDEX(location,',', 1) AS lat, SUBSTR(location, POSITION(',' IN  location)+2, LENGTH(location)) AS lon FROM record WHERE type='seguridad';")
 percepciones_seguro = cur.fetchall()
 
+mapa = go.Figure(go.Scattermapbox())
+mapa.update_layout(map_layout)
+
 # Map - Callback
 @app.callback(Output("mapa-movil", "figure"), [Input("switches-input-movil", "value")])
 @app.callback(Output("mapa-desktop", "figure"), [Input("switches-input-desktop", "value")])
 def on_form_change(switches_value):
 
-    #print(switches_value)
-    #print(len(switches_value))
+    mapa = go.Figure(go.Scattermapbox())
 
-    if switches_value == [1]:
-        #print("passed through (1)")
-
-        estaciones_mapa = go.Figure(go.Scattermapbox(
-            lon=estaciones_metro["longitud"],
-            lat=estaciones_metro["latitud"],
-            marker={'size': 14, 'symbol': "rail-metro", "opacity": 1},
-            hovertext=estaciones_metro["name"],
-            hoverinfo="text"
-        ))
-
-        estaciones_mapa.update_layout(map_layout)
-
-        return estaciones_mapa
-
-    elif switches_value == [2]:
-       #print("passed through (2)")
-
-        reportes_mapa = go.Figure(go.Scattermapbox(
-            lon=reportes["longitud"],
+    # 911
+    if 1 in switches_value:
+        mapa.add_scattermapbox(
             lat=reportes["latitud"],
-            marker={'size': 0, 'opacity': .1, 'color': '#4974a5'},
-            cluster={'opacity': .3}
-        ))
-
-        reportes_mapa.update_layout(map_layout)
-
-        return reportes_mapa
-
-    elif switches_value == [3]:
-        #print("passed through (3)")
-
-        percepciones_mapa = go.Figure(go.Scattermapbox(
-            lon=list(map(lambda x: x[1], percepciones)),
-            lat=list(map(lambda x: x[0], percepciones)),
-            marker={'size': 14, 'opacity': .7, 'color': '#A97BB5'},
-            hoverinfo="none"
-        ))
-
-        percepciones_mapa.update_layout(map_layout)
-
-        return percepciones_mapa
-
-    elif switches_value == [4]:
-        #print("passed through (4)")
-
-        percepciones_seguro_mapa = go.Figure(go.Scattermapbox(
-            lon=list(map(lambda x: x[1], percepciones_seguro)),
-            lat=list(map(lambda x: x[0], percepciones_seguro)),
-            marker={'size': 14, 'opacity': .7, 'color': '#8bb77f'},
-            hoverinfo="none"
-        ))
-
-        percepciones_seguro_mapa.update_layout(map_layout)
-
-        return percepciones_seguro_mapa
-
-    elif switches_value == [1, 2] or switches_value == [2, 1]:
-        #print("passed through (1, 2)")
-
-        # Estaciones + Reportes
-        estaciones_reportes = go.Figure(go.Scattermapbox(
             lon=reportes["longitud"],
-            lat=reportes["latitud"],
-            marker={'size': 0, 'opacity': .1, 'color': '#4974a5'},
-            cluster={'opacity': .3}
-        ))
-
-        estaciones_reportes.add_scattermapbox(
-            lon=estaciones_metro["longitud"],
-            lat=estaciones_metro["latitud"],
-            marker={'size': 14, 'symbol': "rail-metro", "opacity": 1},
-            hovertext=estaciones_metro["name"],
-            hoverinfo="text"
+            marker={'size': 6, 'opacity': .1, 'color': '#4974a5'},
+            hoverinfo="none"
         )
 
-        estaciones_reportes.update_layout(map_layout)
-
-        return estaciones_reportes
-
-    elif switches_value == [1, 3] or switches_value == [3, 1]:
-        #print("passed through (1, 3)")
-
-        # Estaciones + Percepciones
-        estaciones_percepciones = go.Figure(go.Scattermapbox(
-            lon=list(map(lambda x: x[1], percepciones)),
+    # Espacios inseguros
+    if 2 in switches_value:
+        mapa.add_scattermapbox(
             lat=list(map(lambda x: x[0], percepciones)),
-            marker={'size': 14, 'opacity': .7, 'color': '#A97BB5'},
-            hoverinfo="none"
-        ))
-
-        estaciones_percepciones.add_scattermapbox(
-            lon=estaciones_metro["longitud"],
-            lat=estaciones_metro["latitud"],
-            marker={'size': 14, 'symbol': "rail-metro", "opacity": 1},
-            hovertext=estaciones_metro["name"],
-            hoverinfo="text"
-        )
-
-        estaciones_percepciones.update_layout(map_layout)
-
-        return estaciones_percepciones
-
-    elif switches_value == [1, 4] or switches_value == [4, 1]:
-        #print("passed through (1, 4)")
-
-        # Estaciones + Percepciones - Seguro
-        estaciones_percepciones_seguro = go.Figure(go.Scattermapbox(
-            lon=list(map(lambda x: x[1], percepciones_seguro)),
-            lat=list(map(lambda x: x[0], percepciones_seguro)),
-            marker={'size': 14, 'opacity': .7, 'color': '#8bb77f'},
-            hoverinfo="none"
-        ))
-
-        estaciones_percepciones_seguro.add_scattermapbox(
-            lon=estaciones_metro["longitud"],
-            lat=estaciones_metro["latitud"],
-            marker={'size': 14, 'symbol': "rail-metro", "opacity": 1},
-            hovertext=estaciones_metro["name"],
-            hoverinfo="text"
-        )
-
-        estaciones_percepciones_seguro.update_layout(map_layout)
-
-        return estaciones_percepciones_seguro
-
-    elif switches_value == [2, 3] or switches_value == [3, 2]:
-        #print("passed through (2, 3)")
-
-        # Reportes + Percepciones
-        reportes_percepciones = go.Figure(go.Scattermapbox(
-            lon=reportes["longitud"],
-            lat=reportes["latitud"],
-            marker={'size': 0, 'opacity': .1, 'color': '#4974a5'},
-            cluster={'opacity': .3}
-        ))
-
-        reportes_percepciones.add_scattermapbox(
             lon=list(map(lambda x: x[1], percepciones)),
-            lat=list(map(lambda x: x[0], percepciones)),
-            marker = {'size': 14, 'opacity': .7, 'color': '#A97BB5'},
-            hoverinfo = "none"
-        )
-
-        reportes_percepciones.update_layout(map_layout)
-
-        return reportes_percepciones
-
-    elif switches_value == [2, 4] or switches_value == [4, 2]:
-        #print("passed through (2-4)")
-
-        # Reportes + Percepciones - Seguro
-        reportes_percepciones_seguro = go.Figure(go.Scattermapbox(
-            lon=reportes["longitud"],
-            lat=reportes["latitud"],
-            marker={'size': 0, 'opacity': .1, 'color': '#4974a5'},
-            cluster={'opacity': .3}
-        ))
-
-        reportes_percepciones_seguro.add_scattermapbox(
-            lon=list(map(lambda x: x[1], percepciones_seguro)),
-            lat=list(map(lambda x: x[0], percepciones_seguro)),
-            marker={'size': 14, 'opacity': .7, 'color': '#8bb77f'},
-            hoverinfo="none"
-        )
-
-        reportes_percepciones_seguro.update_layout(map_layout)
-
-        return reportes_percepciones_seguro
-
-    elif switches_value == [3, 4] or switches_value == [4, 3]:
-        #print("passed through (3-4)")
-
-        # Ambas Percepciones
-        percepciones_ambas = go.Figure(go.Scattermapbox(
-            lon=list(map(lambda x: x[1], percepciones_seguro)),
-            lat=list(map(lambda x: x[0], percepciones_seguro)),
-            marker={'size': 14, 'opacity': .7, 'color': '#8bb77f'},
-            hoverinfo="none"
-        ))
-
-        percepciones_ambas.add_scattermapbox(
-            lon=list(map(lambda x: x[1], percepciones)),
-            lat=list(map(lambda x: x[0], percepciones)),
             marker={'size': 14, 'opacity': .7, 'color': '#A97BB5'},
             hoverinfo="none"
         )
 
-        percepciones_ambas.update_layout(map_layout)
-
-        return percepciones_ambas
-
-    elif switches_value == [1, 2, 3] or switches_value == [1, 3, 2] or switches_value == [2, 1, 3]\
-            or switches_value == [2, 3, 1] or switches_value == [3, 1, 2] or switches_value == [3, 2, 1]:
-        #print("passed through (1, 2, 3)")
-
-        # Estaciones + Reportes + Percepciones
-        estaciones_reportes_percepciones = go.Figure(go.Scattermapbox(
-            lon=reportes["longitud"],
-            lat=reportes["latitud"],
-            marker={'size': 0, 'opacity': .1, 'color': '#4974a5'},
-            cluster={'opacity': .3}
-        ))
-
-        estaciones_reportes_percepciones.add_scattermapbox(
-            lon=list(map(lambda x: x[1], percepciones)),
-            lat=list(map(lambda x: x[0], percepciones)),
-            marker={'size': 14, 'opacity': .7, 'color': '#A97BB5'},
-            hoverinfo="none"
-        )
-
-        estaciones_reportes_percepciones.add_scattermapbox(
-            lon=estaciones_metro["longitud"],
-            lat=estaciones_metro["latitud"],
-            marker={'size': 14, 'symbol': "rail-metro", "opacity": 1},
-            hovertext=estaciones_metro["name"],
-            hoverinfo="text"
-        )
-
-        estaciones_reportes_percepciones.update_layout(map_layout)
-
-        return estaciones_reportes_percepciones
-
-    elif switches_value == [1, 2, 4] or switches_value == [1, 4, 2] or switches_value == [2, 1, 4]\
-            or switches_value == [2, 4, 1] or switches_value == [4, 1, 2] or switches_value == [4, 2, 1]:
-        #print("passed through (1, 2, 4)")
-
-        # Estaciones + Reportes + Percepciones - Seguro
-        estaciones_reportes_percepciones_seguro = go.Figure(go.Scattermapbox(
-            lon=reportes["longitud"],
-            lat=reportes["latitud"],
-            marker={'size': 0, 'opacity': .1, 'color': '#4974a5'},
-            cluster={'opacity': .3}
-        ))
-
-        estaciones_reportes_percepciones_seguro.add_scattermapbox(
-            lon=list(map(lambda x: x[1], percepciones_seguro)),
+    # Espacios seguros
+    if 3 in switches_value:
+        mapa.add_scattermapbox(
             lat=list(map(lambda x: x[0], percepciones_seguro)),
+            lon=list(map(lambda x: x[1], percepciones_seguro)),
             marker={'size': 14, 'opacity': .7, 'color': '#8bb77f'},
             hoverinfo="none"
         )
 
-        estaciones_reportes_percepciones_seguro.add_scattermapbox(
-            lon=estaciones_metro["longitud"],
-            lat=estaciones_metro["latitud"],
-            marker={'size': 14, 'symbol': "rail-metro", "opacity": 1},
-            hovertext=estaciones_metro["name"],
-            hoverinfo="text"
-        )
-
-        estaciones_reportes_percepciones_seguro.update_layout(map_layout)
-
-        return estaciones_reportes_percepciones_seguro
-
-
-    elif switches_value == [1, 3, 4] or switches_value == [1, 4, 3] or switches_value == [3, 1, 4] \
-            or switches_value == [3, 4, 1] or switches_value == [4, 1, 3] or switches_value == [4, 3, 1]:
-        #print("passed through (1, 3, 4)")
-
-        # Estaciones + Ambas Percepciones
-        estaciones_percepciones_ambas = go.Figure(go.Scattermapbox(
-            lon=list(map(lambda x: x[1], percepciones_seguro)),
-            lat=list(map(lambda x: x[0], percepciones_seguro)),
-            marker={'size': 14, 'opacity': .7, 'color': '#8bb77f'},
-            hoverinfo="none"
-        ))
-
-        estaciones_percepciones_ambas.add_scattermapbox(
-            lon=list(map(lambda x: x[1], percepciones)),
-            lat=list(map(lambda x: x[0], percepciones)),
-            marker={'size': 14, 'opacity': .7, 'color': '#A97BB5'},
-            hoverinfo="none"
-        )
-
-        estaciones_percepciones_ambas.add_scattermapbox(
-            lon=estaciones_metro["longitud"],
-            lat=estaciones_metro["latitud"],
-            marker={'size': 14, 'symbol': "rail-metro", "opacity": 1},
-            hovertext=estaciones_metro["name"],
-            hoverinfo="text"
-        )
-
-        estaciones_percepciones_ambas.update_layout(map_layout)
-
-        return estaciones_percepciones_ambas
-
-    elif switches_value == [2, 3, 4] or switches_value == [2, 4, 3] or switches_value == [3, 2, 4]\
-            or switches_value == [3, 4, 2] or switches_value == [4, 2, 3] or switches_value == [4, 3, 2]:
-        #print("passed through (2, 3, 4)")
-
-        # Reportes + Ambas Percepciones
-        reportes_percepciones_ambas = go.Figure(go.Scattermapbox(
-            lon=reportes["longitud"],
-            lat=reportes["latitud"],
-            marker={'size': 0, 'opacity': .1, 'color': '#4974a5'},
-            cluster={'opacity': .3}
-        ))
-
-        reportes_percepciones_ambas.add_scattermapbox(
-            lon=list(map(lambda x: x[1], percepciones_seguro)),
-            lat=list(map(lambda x: x[0], percepciones_seguro)),
-            marker={'size': 14, 'opacity': .7, 'color': '#8bb77f'},
-            hoverinfo="none"
-        )
-
-        reportes_percepciones_ambas.add_scattermapbox(
-            lon=list(map(lambda x: x[1], percepciones)),
-            lat=list(map(lambda x: x[0], percepciones)),
-            marker={'size': 14, 'opacity': .7, 'color': '#A97BB5'},
-            hoverinfo="none"
-        )
-
-        reportes_percepciones_ambas.update_layout(map_layout)
-
-        return reportes_percepciones_ambas
-
-    elif len(switches_value) == 4:
-        #print("passed though todas")
-
-        # Mapa - Todas
-        mapa_todas = go.Figure(go.Scattermapbox(
-            lon=reportes["longitud"],
-            lat=reportes["latitud"],
-            marker={'size': 0, 'opacity': .1, 'color': '#4974a5'},
-            cluster={'opacity': .3}
-        ))
-
-        mapa_todas.add_scattermapbox(
-            lon=list(map(lambda x: x[1], percepciones_seguro)),
-            lat=list(map(lambda x: x[0], percepciones_seguro)),
-            marker={'size': 14, 'opacity': .7, 'color': '#8bb77f'},
-            hoverinfo="none"
-        )
-
-        mapa_todas.add_scattermapbox(
-            lon=list(map(lambda x: x[1], percepciones)),
-            lat=list(map(lambda x: x[0], percepciones)),
-            marker={'size': 14, 'opacity': .7, 'color': '#A97BB5'},
-            hoverinfo="none"
-        )
-
-        mapa_todas.add_scattermapbox(
-            lon=estaciones_metro["longitud"],
-            lat=estaciones_metro["latitud"],
-            marker={'size': 14, 'symbol': "rail-metro", "opacity": 1},
-            hovertext=estaciones_metro["name"],
-            hoverinfo="text"
-        )
-
-        mapa_todas.update_layout(map_layout)
-
-        return mapa_todas
-
-    elif len(switches_value) == 0:
-        #print("passed through (0)")
-
-        placeholder = go.Figure(go.Scattermapbox(
-            lon=list(map(lambda x: x[1], percepciones)),
-            lat=list(map(lambda x: x[0], percepciones)),
-            marker={'size': 0, 'opacity': .5, 'color': '#E2474B'},
-            hoverinfo="none"
-        ))
-
-        placeholder.update_layout(map_layout)
-
-        return placeholder
-
+    mapa.update_layout(map_layout)
+    return mapa
 
 #ACCESING PAGES
 
