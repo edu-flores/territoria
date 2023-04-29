@@ -2,7 +2,7 @@ import dash
 from dash import Dash, html,Input,Output,dcc
 import dash_bootstrap_components as dbc
 
-dash.register_page(__name__, path="/page_not_found")
+dash.register_page(__name__, path='/page_not_found')
 
 
 #Page layout
@@ -14,39 +14,39 @@ layout = dbc.Container([
 
             html.A(
                 dbc.Row(
-                    dbc.Col(html.Img(src="assets/georregias_logo.jpeg", height="30px")),
-                    align="center", className="g-0"
+                    dbc.Col(html.Img(src='assets/georregias_logo.jpeg', height='30px')),
+                    align='center', className='g-0'
                 ),
-                href="/"
+                href='/'
             ),
 
-            dbc.NavbarToggler(id="navbar-toggler", n_clicks=0),
+            dbc.NavbarToggler(id='navbar-toggler', n_clicks=0),
 
             dbc.Collapse(
                 dbc.Nav([
-                    dbc.NavItem(dbc.NavLink("Territoria", href="/territoria")),
-                    dbc.NavItem(dbc.NavLink("Sección Violeta", href="/seccionvioleta")),
-                ], className="ms-auto", navbar=True),
-                id="navbar-collapse", navbar=True,
+                    dbc.NavItem(dbc.NavLink('Territoria', href='/territoria')),
+                    dbc.NavItem(dbc.NavLink('Sección Violeta', href='/seccionvioleta')),
+                ], className='ms-auto', navbar=True),
+                id='navbar-collapse', navbar=True,
             ),
 
-        ]), color="#FFFFFF", dark=False, className="head_margin"
+        ]), color='#FFFFFF', dark=False, className='head_margin'
     ),
 
     #Title
-    html.H1("Lo sentimos.", className="center title title_404"),
+    html.H1('Lo sentimos.', className='center title title_404'),
 
     #Notice
     html.Div(
                 [
-                    html.H3("Parece que la página que estás buscando no existe.", className="center notice"),
+                    html.H3('Parece que la página que estás buscando no existe.', className='center notice'),
                    
                     #Return to home link
-                    html.A("Volver a inicio", href="/", className="home_link center")
+                    html.A('Volver a inicio', href='/', className='home_link center')
 
                 ]
     
-    ,className="div_404")
+    ,className='div_404')
     
 
 ],fluid=False)

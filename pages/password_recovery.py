@@ -2,22 +2,22 @@ import dash
 from dash import Dash, html,Input,Output,dcc
 import dash_bootstrap_components as dbc
 
-dash.register_page(__name__, path="/password_recovery")
+dash.register_page(__name__, path='/password_recovery')
 
 #Password recovery form inputs
 email_input = html.Div(
     [
-        dbc.Label("Email", html_for="recovery_email", className="form_label"),
-        dbc.Input(type="email",
-                  id="recovery_email", 
-                  placeholder="Ingresa tu correo electrónico",
-                  className="mb-3 form_field_password_recovery"),   
+        dbc.Label('Email', html_for='recovery_email', className='form_label'),
+        dbc.Input(type='email',
+                  id='recovery_email', 
+                  placeholder='Ingresa tu correo electrónico',
+                  className='mb-3 form_field_password_recovery'),   
         #Alert
-        dbc.FormFeedback("Ingrese un correo electrónico válido.",
-                          type="invalid",
+        dbc.FormFeedback('Ingrese un correo electrónico válido.',
+                          type='invalid',
         ),
     ],
-    className="mb-3",
+    className='mb-3',
 )
 
 # Page layout
@@ -29,50 +29,50 @@ layout = dbc.Container([
 
             html.A(
                 dbc.Row(
-                    dbc.Col(html.Img(src="assets/georregias_logo.jpeg", height="30px")),
-                    align="center", className="g-0"
-                ), href="/"
+                    dbc.Col(html.Img(src='assets/georregias_logo.jpeg', height='30px')),
+                    align='center', className='g-0'
+                ), href='/'
             ),
 
-            dbc.NavbarToggler(id="navbar-toggler", n_clicks=0),
+            dbc.NavbarToggler(id='navbar-toggler', n_clicks=0),
 
 
             dbc.Collapse(
                 dbc.Nav([
-                    dbc.NavItem(dbc.NavLink("Iniciar sesión", href="/login")),
-                ], className="ms-auto", navbar=True),
-                id="navbar-collapse", navbar=True,
+                    dbc.NavItem(dbc.NavLink('Iniciar sesión', href='/login')),
+                ], className='ms-auto', navbar=True),
+                id='navbar-collapse', navbar=True,
             )
             
-        ]), color="#FFFFFF", dark=False, className="head_margin"
+        ]), color='#FFFFFF', dark=False, className='head_margin'
     ),
 
     #Alert 
-    html.Div(dbc.Alert("El correo ingresado no esta asociado a ninguna cuenta.", color="danger", id="bad_email_alert",className="bad_c_alert",is_open=False, duration=10000)),
+    html.Div(dbc.Alert('El correo ingresado no esta asociado a ninguna cuenta.', color='danger', id='bad_email_alert',className='bad_c_alert',is_open=False, duration=10000)),
 
     #Main Div
     html.Div([
     
             #Title
-            html.H1("Restablecer contraseña", className="title"),
+            html.H1('Restablecer contraseña', className='title'),
 
             #Legend
-            html.P("Ingresa en el formulario tu correo de administrador.",className="password_recovery_legend"),
-            html.P("Te enviaremos instrucciones para restablecer la contraseña.", className="password_recovery_legend margin_bottom_20"),
+            html.P('Ingresa en el formulario tu correo de administrador.',className='password_recovery_legend'),
+            html.P('Te enviaremos instrucciones para restablecer la contraseña.', className='password_recovery_legend margin_bottom_20'),
 
 
             dbc.Form([email_input]),
-            html.Div(id="password_recovery_form"),
+            html.Div(id='password_recovery_form'),
 
              html.Div(
                 [
                     dbc.Button(
-                        "Enviar email", id="password_recovery_submit_button", className="me-2 submit_btn btn_margin",
+                        'Enviar email', id='password_recovery_submit_button', className='me-2 submit_btn btn_margin',
                     ),
-                ], className="center"
+                ], className='center'
              )
              
-    ] , className="password_recovery_page_div")
+    ] , className='password_recovery_page_div')
 
 ], fluid=False)
 

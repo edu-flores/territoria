@@ -34,13 +34,13 @@ app = Dash(__name__,
            )
 
 # Secret key
-app.server.secret_key = "purpleMap"
+app.server.secret_key = 'purpleMap'
 
-app.index_string = """<!DOCTYPE html>
+app.index_string = '''<!DOCTYPE html>
 <html>
     <head>
         <!-- Google tag (gtag.js) -->
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-57PKT06DTW"></script>
+        <script async src='https://www.googletagmanager.com/gtag/js?id=G-57PKT06DTW'></script>
         <script>
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
@@ -61,7 +61,7 @@ app.index_string = """<!DOCTYPE html>
             {%renderer%}
         </footer>
     </body>
-</html>"""
+</html>'''
 
 server = app.server
 
@@ -69,12 +69,12 @@ server = app.server
 app.layout = html.Div(
     [
         # dash.page_container
-        dcc.Location(id="url", refresh=False),
-        html.Div(id="page-content", children=[]),
+        dcc.Location(id='url', refresh=False),
+        html.Div(id='page-content', children=[]),
     ]
 )
 
-app.config["suppress_callback_exceptions"] = True
+app.config['suppress_callback_exceptions'] = True
 
 # Call to pages
 from pages import (
@@ -96,9 +96,9 @@ def toggle_navbar_collapse(n, is_open):
     return is_open
 
 app.callback(
-    Output("navbar-collapse", "is_open"),
-    [Input("navbar-toggler", "n_clicks")],
-    [State("navbar-collapse", "is_open")],
+    Output('navbar-collapse', 'is_open'),
+    [Input('navbar-toggler', 'n_clicks')],
+    [State('navbar-collapse', 'is_open')],
 )(toggle_navbar_collapse)
 
 
@@ -109,16 +109,16 @@ def toggle_offcanvas(n1, is_open):
     return is_open
 
 app.callback(
-    Output("offcanvas", "is_open"),
-    Input("open-offcanvas", "n_clicks"),
-    [State("offcanvas", "is_open")],
+    Output('offcanvas', 'is_open'),
+    Input('open-offcanvas', 'n_clicks'),
+    [State('offcanvas', 'is_open')],
 )(toggle_offcanvas)
 
 
 # Map
 
 # Access token
-token = "pk.eyJ1IjoianB6cDIwMDEiLCJhIjoiY2xmcmEzNnhyMDNjdDNycXQ0d3A2N3NjbyJ9.PUJ_q_U96vOQ94oli7JT6g"
+token = 'pk.eyJ1IjoianB6cDIwMDEiLCJhIjoiY2xmcmEzNnhyMDNjdDNycXQ0d3A2N3NjbyJ9.PUJ_q_U96vOQ94oli7JT6g'
 
 # Map layout
 map_layout = dict(
@@ -139,17 +139,17 @@ map_layout = dict(
 # Connect to MariaDB Platform
 try:
     conn = mariadb.connect(
-        user="root", password="root", host="localhost", port=3307, database="georregias"
+        user='root', password='root', host='localhost', port=3307, database='georregias'
     )
     cur = conn.cursor()
 except mariadb.Error as e:
-    print(f"Error connecting to MariaDB Platform: {e}")
+    print(f'Error connecting to MariaDB Platform: {e}')
 
 # Estaciones de Metro
-# estaciones_metro = pd.read_csv("assets/estaciones_metro.csv")
+# estaciones_metro = pd.read_csv('assets/estaciones_metro.csv')
 
 # Reportes
-reportes = pd.read_csv("assets/reportes.csv")
+reportes = pd.read_csv('assets/reportes.csv')
 
 # Percepciones - Espacio inseguro y de peligro
 cur.execute("SELECT SUBSTRING_INDEX(location,',', 1) AS lat, SUBSTR(location, POSITION(',' IN  location)+2, LENGTH(location)) AS lon FROM record WHERE type='inseguro';")
@@ -163,8 +163,8 @@ mapa = go.Figure(go.Scattermapbox())
 mapa.update_layout(map_layout)
 
 # Map - Callback
-@app.callback(Output("mapa-movil", "figure"), [Input("switches-input-movil", "value")])
-@app.callback(Output("mapa-desktop", "figure"), [Input("switches-input-desktop", "value")])
+@app.callback(Output('mapa-movil', 'figure'), [Input('switches-input-movil', 'value')])
+@app.callback(Output('mapa-desktop', 'figure'), [Input('switches-input-desktop', 'value')])
 def on_form_change(switches_value):
 
     mapa = go.Figure(go.Scattermapbox())
@@ -172,10 +172,10 @@ def on_form_change(switches_value):
     # 911
     if 1 in switches_value:
         mapa.add_scattermapbox(
-            lat=reportes["latitud"],
-            lon=reportes["longitud"],
+            lat=reportes['latitud'],
+            lon=reportes['longitud'],
             marker={'size': 6, 'opacity': .1, 'color': '#4974a5'},
-            hoverinfo="none"
+            hoverinfo='none'
         )
 
     # Espacios inseguros
@@ -184,7 +184,7 @@ def on_form_change(switches_value):
             lat=list(map(lambda x: x[0], percepciones)),
             lon=list(map(lambda x: x[1], percepciones)),
             marker={'size': 14, 'opacity': .7, 'color': '#A97BB5'},
-            hoverinfo="none"
+            hoverinfo='none'
         )
 
     # Espacios seguros
@@ -193,7 +193,7 @@ def on_form_change(switches_value):
             lat=list(map(lambda x: x[0], percepciones_seguro)),
             lon=list(map(lambda x: x[1], percepciones_seguro)),
             marker={'size': 14, 'opacity': .7, 'color': '#8bb77f'},
-            hoverinfo="none"
+            hoverinfo='none'
         )
 
     mapa.update_layout(map_layout)
@@ -202,24 +202,24 @@ def on_form_change(switches_value):
 #ACCESING PAGES
 
 # Based on the path, returns a page's layout
-@app.callback(Output("page-content", "children"), Input("url", "pathname"))
+@app.callback(Output('page-content', 'children'), Input('url', 'pathname'))
 def display_page(pathname):
-    if pathname == "/":
+    if pathname == '/':
         return home.layout
-    if pathname == "/territoria":
+    if pathname == '/territoria':
         return territoria.layout
-    if pathname == "/seccionvioleta":
+    if pathname == '/seccionvioleta':
         return seccionvioleta.layout
-    if pathname == "/login":
-        if "user" in session:
-            redirect("/index")
+    if pathname == '/login':
+        if 'user' in session:
+            redirect('/index')
             return index.layout
         else:
             return login.layout
-    if pathname == "/password_recovery":
+    if pathname == '/password_recovery':
         return password_recovery.layout
-    if pathname == "/index":
-        if "user" not in session:
+    if pathname == '/index':
+        if 'user' not in session:
             return login.layout
         else:
             return index.layout
@@ -227,12 +227,12 @@ def display_page(pathname):
         return page_not_found.layout
 
 #Deleting records route
-@app.server.route("/delete_record/<int:id>",methods=['GET'])
+@app.server.route('/delete_record/<int:id>',methods=['GET'])
 def page_delete_record(id):
         if 'user' not in session:
             return redirect('/page_not_found')
         else:
-            cur.execute("CALL check_record(%s)",(id,))
+            cur.execute('CALL check_record(%s)',(id,))
             data=cur.fetchone()
             if data[0]:
                 cur.execute('CALL get_record(%s)', (id,))
@@ -255,7 +255,7 @@ def execute_delete_record(id):
     if 'user' not in session:
         return redirect('/page_not_found')
     else:
-        cur.execute("CALL delete_record(%s)",(id,))
+        cur.execute('CALL delete_record(%s)',(id,))
         conn.commit()
         return render_template('/delete_alert.html')
         
@@ -270,7 +270,7 @@ def restore_password():
 
 # Checks the conditions the email has to fulfill
 def check_email(email):
-    if email is not None and ("@" not in email or "." not in email or "@." in email):
+    if email is not None and ('@' not in email or '.' not in email or '@.' in email):
         return True
     return False
 
@@ -284,8 +284,8 @@ def check_password(password):
 
 # Validate login form inputs : If at least one input is empty, the submit button is disabled
 @app.callback(
-    Output("submit_button", "disabled"),
-    [Input("email", "value"), Input("password", "value")],
+    Output('submit_button', 'disabled'),
+    [Input('email', 'value'), Input('password', 'value')],
 )
 def login_inputs_validation(email, password):
     if (
@@ -300,7 +300,7 @@ def login_inputs_validation(email, password):
 
 # Email input feedback : If the email is not valid, feedback will be shown to the user
 @app.callback(
-    Output("email", "invalid"), Input("email", "value"), prevent_initial_call=True
+    Output('email', 'invalid'), Input('email', 'value'), prevent_initial_call=True
 )
 def show_email_feedback(email):
     if check_email(email):
@@ -310,7 +310,7 @@ def show_email_feedback(email):
 
 # Password input feedback : If the password is not valid, feedback will be shown to the user
 @app.callback(
-    Output("password", "invalid"), Input("password", "value"), prevent_initial_call=True
+    Output('password', 'invalid'), Input('password', 'value'), prevent_initial_call=True
 )
 def show_password_feedback(password):
     if check_password(password):
@@ -320,21 +320,21 @@ def show_password_feedback(password):
 
 # User credentials authentication : Checks that both credentials exist in the db to authenticate the user into the system
 @app.callback(
-    [Output("login_form", "children"), Output("bad_credentials_alert", "is_open")],
-    Input("submit_button", "n_clicks"),
-    State("email", "value"),
-    State("password", "value"),
+    [Output('login_form', 'children'), Output('bad_credentials_alert', 'is_open')],
+    Input('submit_button', 'n_clicks'),
+    State('email', 'value'),
+    State('password', 'value'),
     prevent_initial_call=True,
 )
 def authenticate_login(n_clicks, email, password):
     if n_clicks is not None:
-        cur.execute("CALL authenticate_login(%s,%s)", (email, password))
+        cur.execute('CALL authenticate_login(%s,%s)', (email, password))
         data = cur.fetchone()[0]
         if data:
-            cur.execute("CALL user_num(%s)", (email,))
+            cur.execute('CALL user_num(%s)', (email,))
             data_id = cur.fetchone()[0]
-            session["user"] = data_id
-            return dcc.Location(href="/index", id="Index"), False
+            session['user'] = data_id
+            return dcc.Location(href='/index', id='Index'), False
         else:
             return True, True
     return True, False
@@ -344,9 +344,9 @@ def authenticate_login(n_clicks, email, password):
 
 # Add record modal : Allows the admin to open the modal to add a report
 @app.callback(
-    Output("add_record_modal", "is_open"),
-    Input("open_add_record_modal", "n_clicks"),
-    State("add_record_modal", "is_open"),
+    Output('add_record_modal', 'is_open'),
+    Input('open_add_record_modal', 'n_clicks'),
+    State('add_record_modal', 'is_open'),
     prevent_initial_call=True,
 )
 def toggle_add_record_modal(n1, is_open):
@@ -383,8 +383,8 @@ def check_longitude(longitude):
 
 # Validate add record form inputs : If at least one input is empty, the submit button is disabled
 @app.callback(
-    Output("add_record_button", "disabled"),
-    [Input("type", "value"), Input("latitude", "value"), Input("longitude", "value")],
+    Output('add_record_button', 'disabled'),
+    [Input('type', 'value'), Input('latitude', 'value'), Input('longitude', 'value')],
 )
 def add_record_input_validation(type, latitude, longitude):
     if (
@@ -398,7 +398,7 @@ def add_record_input_validation(type, latitude, longitude):
 
 # Latitude input feedback : If the latitude is not valid, feedback will be shown to the user
 @app.callback(
-    Output("latitude", "invalid"), Input("latitude", "value"), prevent_initial_call=True
+    Output('latitude', 'invalid'), Input('latitude', 'value'), prevent_initial_call=True
 )
 def latitude_validation(latitude):
     if check_latitude(latitude) == False:
@@ -408,8 +408,8 @@ def latitude_validation(latitude):
 
 # Longitude input feedback : If the longitude is not valid, feedback will be shown to the user
 @app.callback(
-    Output("longitude", "invalid"),
-    Input("longitude", "value"),
+    Output('longitude', 'invalid'),
+    Input('longitude', 'value'),
     prevent_initial_call=True,
 )
 def longitude_validation(longitude):
@@ -420,9 +420,9 @@ def longitude_validation(longitude):
 
 # Filter records modal :  Allows the user to open the modal to filter the records
 @app.callback(
-    Output("filter_records_modal", "is_open", allow_duplicate=True),
-    Input("open_filter_records_modal", "n_clicks"),
-    State("filter_records_modal", "is_open"),
+    Output('filter_records_modal', 'is_open', allow_duplicate=True),
+    Input('open_filter_records_modal', 'n_clicks'),
+    State('filter_records_modal', 'is_open'),
     prevent_initial_call=True,
 )
 def toggle_filter_records_modal(n1, is_open):
@@ -433,32 +433,32 @@ def toggle_filter_records_modal(n1, is_open):
 
 # Show records:  Shows the records in the table by default when accesing index but also when using filters
 @app.callback(
-    [Output("table", "children"),Output("filter_records_modal","is_open")],
+    [Output('table', 'children'),Output('filter_records_modal','is_open')],
     [
-        Input("filter_records_button", "n_clicks"),
-        State("type_filter", "value"),
-        State("day_filter", "value"),
-        State("month_filter", "value"),
-        State("year_filter", "value"),
+        Input('filter_records_button', 'n_clicks'),
+        State('type_filter', 'value'),
+        State('day_filter', 'value'),
+        State('month_filter', 'value'),
+        State('year_filter', 'value'),
     ],
 )
 def show_records(n, type_filter, day_filter, month_filter, year_filter):
     if n > 0:
         if type_filter is None:
-            type_filter = ""
+            type_filter = ''
         if day_filter is None:
-            day_filter = ""
+            day_filter = ''
         if month_filter is None:
-            month_filter = ""
+            month_filter = ''
         if year_filter is None:
-            year_filter = ""
+            year_filter = ''
         cur.execute(
-            "CALL filter_records(%s,%s,%s,%s)",
+            'CALL filter_records(%s,%s,%s,%s)',
             (type_filter, day_filter, month_filter, year_filter),
         )
         data = cur.fetchall()
         return create_table(data), False
-    cur.execute("CALL obtain_records()")
+    cur.execute('CALL obtain_records()')
     data = cur.fetchall()
     return create_table(data), False
 
@@ -466,17 +466,17 @@ def show_records(n, type_filter, day_filter, month_filter, year_filter):
 # Add record form : Inserts the given information as a record in the db and shows succesful alert
 @app.callback(
     [
-        Output("added_record_alert", "is_open"),
-        Output("add_record_modal", "is_open", allow_duplicate=True),
+        Output('added_record_alert', 'is_open'),
+        Output('add_record_modal', 'is_open', allow_duplicate=True),
     ],
-    Input("add_record_button", "n_clicks"),
-    [State("type", "value"), State("latitude", "value"), State("longitude", "value")],
+    Input('add_record_button', 'n_clicks'),
+    [State('type', 'value'), State('latitude', 'value'), State('longitude', 'value')],
     prevent_initial_call=True,
 )
 def add_record(n_clicks, type, latitude, longitude):
     if n_clicks > 0:
         cur.execute(
-            "CALL add_record(%s,%s,%s,%s)", (session["user"], type, latitude, longitude)
+            'CALL add_record(%s,%s,%s,%s)', (session['user'], type, latitude, longitude)
         )
         conn.commit()
         return True, False
@@ -484,14 +484,14 @@ def add_record(n_clicks, type, latitude, longitude):
 
 # When record added alert is closed, refreshes the page
 @app.callback(
-    Output("url", "pathname", allow_duplicate=True),
-    Input("added_record_alert", "is_open"),
+    Output('url', 'pathname', allow_duplicate=True),
+    Input('added_record_alert', 'is_open'),
     prevent_initial_call=True,
 )
 def redirect_after_alert(change):
     if not change:
         time.sleep(1)
-        return "/index"
+        return '/index'
     raise PreventUpdate
 
 
@@ -500,39 +500,39 @@ def create_table(data):
     table_records = []
     table_headers = html.Tr(
         [
-            html.Th("id"),
-            html.Th("Tipo"),
-            html.Th("Ubicación"),
-            html.Th("Fecha de admisión"),
-            html.Th("Registrado por"),
-            html.Th("Eliminar"),
+            html.Th('id'),
+            html.Th('Tipo'),
+            html.Th('Ubicación'),
+            html.Th('Fecha de admisión'),
+            html.Th('Registrado por'),
+            html.Th('Eliminar'),
         ]
     )
     for record in data:
         record_cols = [html.Td(str(col)) for col in record]
-        # link_col = html.Td(html.A("Eliminar",id="delete_record_button",className="delete_record_btn",href='/delete_record/%s' % (str(record[0]))))
+        # link_col = html.Td(html.A('Eliminar',id='delete_record_button',className='delete_record_btn',href='/delete_record/%s' % (str(record[0]))))
         link_col = html.Td(
             html.A(
-                "X",
+                'X',
                 n_clicks=0,
-                className="delete_record_btn",
-                href="delete_record/%s" % (str(record[0])),
+                className='delete_record_btn',
+                href='delete_record/%s' % (str(record[0])),
             )
         )
         table_records.append(html.Tr(record_cols + [link_col]))
-    table = html.Table([html.Thead(table_headers), html.Tbody(table_records)], className="table")
+    table = html.Table([html.Thead(table_headers), html.Tbody(table_records)], className='table')
     return table
 
 
 # Delete records modal
 # Medio funciona si agregas los elementos manualmente en el diccionario.
 @app.callback(
-    Output("delete_record_modal", "is_open"),
+    Output('delete_record_modal', 'is_open'),
     inputs={
-        "all_inputs": {
-            "btn1": Input("delete_record_1", "n_clicks"),
-            "btn2": Input("delete_record_2", "n_clicks"),
-            "btn3": Input("delete_record_3", "n_clicks"),
+        'all_inputs': {
+            'btn1': Input('delete_record_1', 'n_clicks'),
+            'btn2': Input('delete_record_2', 'n_clicks'),
+            'btn3': Input('delete_record_3', 'n_clicks'),
         }
     },
     prevent_initial_call=True,
@@ -548,24 +548,24 @@ def display(all_inputs):
     return False
 
 
-# Sign out :  When user clicks "close session", the session variable is popped and the user is redirected to login
+# Sign out :  When user clicks 'close session', the session variable is popped and the user is redirected to login
 @app.callback(
-    Output("url", "pathname"),
-    Input("sign_out_button", "n_clicks"),
+    Output('url', 'pathname'),
+    Input('sign_out_button', 'n_clicks'),
     prevent_initial_call=True,
 )
 def sign_out(clicked):
     if clicked:
-        session.pop("user", None)
-        return "/login"
+        session.pop('user', None)
+        return '/login'
     raise PreventUpdate
     
 #PASSWORD RECOVERY
 
 #Validate email form input : If the input is empty, the submit button is disabled
 @app.callback(
-    Output("password_recovery_submit_button", "disabled"),
-    Input("recovery_email", "value"))
+    Output('password_recovery_submit_button', 'disabled'),
+    Input('recovery_email', 'value'))
 
 def password_recovery_input_validation(email):
         if email is None or check_email(email):
@@ -574,8 +574,8 @@ def password_recovery_input_validation(email):
 
 #Recovery email input feedback : If the email is not valid, feedback will be shown to the user
 @app.callback(
-    Output("recovery_email", "invalid"),
-    Input("recovery_email", "value"),
+    Output('recovery_email', 'invalid'),
+    Input('recovery_email', 'value'),
     prevent_initial_call=True
 )
 
