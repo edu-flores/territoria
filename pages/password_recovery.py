@@ -48,7 +48,7 @@ layout = dbc.Container([
     ),
 
     #Alert 
-    html.Div(dbc.Alert('El correo ingresado no esta asociado a ninguna cuenta.', color='danger', id='bad_email_alert',className='bad_c_alert',is_open=False, duration=10000)),
+    html.Div(dbc.Alert('El correo ingresado no esta asociado a ninguna cuenta.', color='danger', id='bad_email_alert',className='bad_c_alert',is_open=False, duration=5000)),
 
     #Main Div
     html.Div([

@@ -490,7 +490,7 @@ def add_record(n_clicks, type, latitude, longitude):
 )
 def redirect_after_alert(change):
     if not change:
-        time.sleep(1)
+        time.sleep(0.1)
         return '/index'
     raise PreventUpdate
 

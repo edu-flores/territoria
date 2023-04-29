@@ -68,7 +68,7 @@ layout = dbc.Container([
     
 
     #Alert 
-    html.Div(dbc.Alert('Las credenciales son incorrectas. Vuelva a intentarlo.', color='danger', id='bad_credentials_alert',className='bad_c_alert',is_open=False, duration=10000)),
+    html.Div(dbc.Alert('Las credenciales son incorrectas. Vuelva a intentarlo.', color='danger', id='bad_credentials_alert',className='bad_c_alert',is_open=False, duration=5000)),
 
     
 

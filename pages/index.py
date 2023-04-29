@@ -167,7 +167,7 @@ layout = dbc.Container([
             color='success', 
             id='added_record_alert',
             is_open=False,
-            duration=7000
+            duration=2000
         )
     ),
 
