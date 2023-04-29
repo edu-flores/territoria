@@ -57,7 +57,7 @@ map_title = html.Span([info_icon, btn_text])
 # Send record
 msg_icon = html.I(className='d-inline-block fa-brands fa-telegram fa-xl')
 
-send_text = html.Div('Envía tu percepción', style={'display': 'inline-block', 'margin-left': '10px'})
+send_text = html.Div('Envía tu percepción', style={'display': 'inline-block', 'marginLeft': '10px'})
 
 send_record_title = html.Span([msg_icon, send_text])
 
