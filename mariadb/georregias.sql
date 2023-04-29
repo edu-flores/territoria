@@ -170,7 +170,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `filter_records`(
 	IN app_year VARCHAR(4)
 )
 BEGIN
-	SELECT record.id,type,location,time,IFNULL(email,'Chatbot') AS added_by FROM record LEFT JOIN admin ON record.added_by=admin.id WHERE type LIKE CONCAT(app_type,'%') AND MONTH(time) LIKE CONCAT('%',app_month,'%') AND DAY(time) LIKE CONCAT( '%',app_day,'%') AND YEAR(time) LIKE CONCAT ('%',app_year,'%');
+	SELECT record.id,type,location,time,IFNULL(email,'Chatbot') AS added_by FROM record LEFT JOIN admin ON record.added_by=admin.id WHERE type LIKE CONCAT(app_type,'%') AND MONTH(time) LIKE CONCAT('%',app_month,'%') AND DAY(time) LIKE CONCAT( '%',app_day,'%') AND YEAR(time) LIKE CONCAT ('%',app_year,'%') ORDER BY time DESC;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
