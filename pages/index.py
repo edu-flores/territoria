@@ -275,8 +275,6 @@ layout = dbc.Container([
     ),
 
     # Security records table
-    html.Div(id='table', className='table'),
-    html.Br(),
-    html.Br(),
-    html.Br(),
+    html.Div(id='table', className='table')
+
 ], fluid=False)

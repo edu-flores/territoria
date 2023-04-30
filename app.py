@@ -124,7 +124,7 @@ token = 'pk.eyJ1IjoianB6cDIwMDEiLCJhIjoiY2xmcmEzNnhyMDNjdDNycXQ0d3A2N3NjbyJ9.PUJ
 map_layout = dict(
     mapbox={
         'accesstoken': token,
-        'style': 'streets',
+        'style': 'outdoors',
         'zoom': 12,
         'center': dict(lat=25.675456439828732, lon=-100.31115409182688)
     },
@@ -433,7 +433,7 @@ def toggle_filter_records_modal(n1, is_open):
 
 # Show records:  Shows the records in the table by default when accesing index but also when using filters
 @app.callback(
-    [Output('table', 'children'),Output('filter_records_modal','is_open')],
+    [Output('table', 'children'), Output('filter_records_modal','is_open')],
     [
         Input('filter_records_button', 'n_clicks'),
         State('type_filter', 'value'),
