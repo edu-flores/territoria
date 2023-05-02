@@ -275,15 +275,6 @@ def execute_delete_record(id):
         cur.execute('CALL delete_record(%s)',(id,))
         conn.commit()
         return render_template('/delete_alert.html')
-        
-    
-@app.server.route('/restore_password')
-def restore_password():
-    if 'user' not in session:
-        return render_template('/restore_password.html')
-    else:
-        return redirect('/index')
-    
     
 #Create token: Creates the token for password recovery
 def get_token(user_id): 
