@@ -13,9 +13,12 @@ from flask import (
     redirect,
     url_for,
 )
+from flask_mail import Mail,Message
 from dash.exceptions import PreventUpdate
 import dash_bootstrap_components as dbc
 import time
+from itsdangerous.url_safe import URLSafeTimedSerializer as Serializer
+from datetime import datetime, timedelta
 
 # Font Awesome Icon's
 external_scripts = [{'src': 'https://kit.fontawesome.com/19f1c21c33.js',
@@ -35,6 +38,17 @@ app = Dash(__name__,
 
 # Secret key
 app.server.secret_key = 'purpleMap'
+
+# App server configs
+app.server.config['SECREY_KEY'] = 'purpleMap'
+app.server.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.server.config['MAIL_PORT'] = 587
+app.server.config['MAIL_USE_TLS'] = True
+app.server.config['MAIL_USERNAME'] = 'territoriamtyy@gmail.com'
+app.server.config['MAIL_PASSWORD'] = 'qmavdntlhdwommco'
+
+# Mail server
+mail=Mail(app.server)
 
 app.index_string = '''<!DOCTYPE html>
 <html>
@@ -217,6 +231,9 @@ def display_page(pathname):
         else:
             return login.layout
     if pathname == '/password_recovery':
+        if 'user' in session:
+            redirect('/index')
+            return index.layout
         return password_recovery.layout
     if pathname == '/index':
         if 'user' not in session:
@@ -266,6 +283,37 @@ def restore_password():
         return render_template('/restore_password.html')
     else:
         return redirect('/index')
+    
+    
+#Create token: Creates the token for password recovery
+def get_token(user_id): 
+    serial=Serializer(app.server.config['SECREY_KEY'])
+    return serial.dumps({'user_id':user_id})
+
+#Verify token: Verifies the token for password recovery belongs to a user and is valid
+def verify_token(token):
+    serial=Serializer(app.server.config['SECREY_KEY'])
+    try:
+        user_id = serial.loads(token,max_age=600)['user_id']
+    except:
+        return None
+    return user_id
+
+#Route for password recovery link: If the link is valid, show the page for restoring the password
+@app.server.route('/restore_password/<token>', methods=['GET','POST'])
+def restore_password(token):
+    user=verify_token(token)
+    if user is None:
+        return render_template('expired_token.html')
+    return render_template('restore_password.html',user_id=user)
+
+# Updates the password, shows succesful alert and redirects to login
+@app.server.route('/restore_password/<int:id>', methods=['POST'])
+def update_password(id):
+    cur.execute('CALL update_password(%s,%s)',(id, request.form.get("new_password")))
+    conn.commit()
+    return render_template('password_updated_alert.html')
+   
 # LOGIN
 
 # Checks the conditions the email has to fulfill
@@ -524,30 +572,6 @@ def create_table(data):
     return table
 
 
-# Delete records modal
-# Medio funciona si agregas los elementos manualmente en el diccionario.
-@app.callback(
-    Output('delete_record_modal', 'is_open'),
-    inputs={
-        'all_inputs': {
-            'btn1': Input('delete_record_1', 'n_clicks'),
-            'btn2': Input('delete_record_2', 'n_clicks'),
-            'btn3': Input('delete_record_3', 'n_clicks'),
-        }
-    },
-    prevent_initial_call=True,
-)
-def display(all_inputs):
-    c = ctx.args_grouping.all_inputs
-    if c.btn1.triggered:
-        return True
-    if c.btn2.triggered:
-        return True
-    if c.btn3.triggered:
-        return True
-    return False
-
-
 # Sign out :  When user clicks 'close session', the session variable is popped and the user is redirected to login
 @app.callback(
     Output('url', 'pathname'),
@@ -584,6 +608,32 @@ def show_password_recovery_email_feedback(email):
         return True
     return False
 
+# Password recovery send mail: When the send email button is clicked, if the email exists in the db, it will create a token and send the recovery link
+@app.callback(
+    [Output('password_recovery_form', 'children'), Output('sent_mail_alert', 'is_open')],
+    Input('password_recovery_submit_button', 'n_clicks'),
+    State('recovery_email', 'value'),
+    prevent_initial_call=True,
+)
+def send_recovery_mail(n_clicks, email):
+    if n_clicks is not None:
+        cur.execute('CALL user_exist(%s)', (email,))
+        data= cur.fetchone()
+        if data[0]!=0:
+            token=get_token(data[1])
+            msg = Message("Cambio de contraseña - Georregias",recipients=[data[0]],sender=("Georregias", "territoriamtyy@gmail.com"))
+            msg.body = f"""Hola {email},\n\n
+                        Para cambiar tu contraseña, por favor da click en el siguiente enlace:\n
+                        {url_for('restore_password',token=token,_external=True)}\n
+                        El enlace vencerá después de 10 minutos.\n
+                        Si no solicitaste un cambio de contraseña, por favor ignora este mensaje.\n\n
+                        Saludos,
+                        Georregias
+                        """
+            mail.send(msg)
+            return True,True
+        return True,True
+    return True,False
 
 if __name__ == '__main__':
     app.run_server(debug=True)
