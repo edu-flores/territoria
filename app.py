@@ -152,11 +152,11 @@ except mariadb.Error as e:
 reportes = pd.read_csv('assets/reportes.csv')
 
 # Percepciones - Espacio inseguro y de peligro
-cur.execute("SELECT SUBSTRING_INDEX(location,',', 1) AS lat, SUBSTR(location, POSITION(',' IN  location)+2, LENGTH(location)) AS lon FROM record WHERE type='inseguro';")
+cur.execute("SELECT SUBSTRING_INDEX(location,',', 1) AS lat, SUBSTR(location, POSITION(',' IN  location)+2, LENGTH(location)) AS lon FROM record WHERE type='inseguro' AND time >= DATE_SUB(NOW(), INTERVAL 3 MONTH);")
 percepciones = cur.fetchall()
 
 # Percepciones - Espacio seguro
-cur.execute("SELECT SUBSTRING_INDEX(location,',', 1) AS lat, SUBSTR(location, POSITION(',' IN  location)+2, LENGTH(location)) AS lon FROM record WHERE type='seguro';")
+cur.execute("SELECT SUBSTRING_INDEX(location,',', 1) AS lat, SUBSTR(location, POSITION(',' IN  location)+2, LENGTH(location)) AS lon FROM record WHERE type='seguro' AND time >= DATE_SUB(NOW(), INTERVAL 3 MONTH);")
 percepciones_seguro = cur.fetchall()
 
 mapa = go.Figure(go.Scattermapbox())
