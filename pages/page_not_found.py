@@ -24,8 +24,7 @@ layout = dbc.Container([
 
             dbc.Collapse(
                 dbc.Nav([
-                    dbc.NavItem(dbc.NavLink('Territoria', href='/territoria')),
-                    dbc.NavItem(dbc.NavLink('Sección Violeta', href='/seccionvioleta')),
+                    dbc.NavItem(dbc.NavLink('Mapa', href='/')),
                 ], className='ms-auto', navbar=True),
                 id='navbar-collapse', navbar=True,
             ),

@@ -2,8 +2,7 @@ import dash
 from dash import Dash, html, dcc, Input, Output, State
 import dash_bootstrap_components as dbc
 
-dash.register_page(__name__, path='/territoria')
-
+dash.register_page(__name__, path='/')
 
 # Map switches - Móvil
 switches_movil = html.Div([
@@ -49,7 +48,7 @@ switches_desktop = html.Div([
 # Map's title
 info_icon = html.I(className='fas fa-info-circle', style=dict(display='inline-block'))
 
-btn_text = html.Div('Territoria', style=dict(paddingLeft='2vw', display='inline-block'))
+btn_text = html.Div('Mapa de Percepciones', style=dict(paddingLeft='2vw', display='inline-block'))
 
 map_title = html.Span([info_icon, btn_text])
 
@@ -80,9 +79,7 @@ layout = html.Div([
 
             dbc.Collapse(
                 dbc.Nav([
-                    dbc.NavItem(dbc.NavLink('Iniciar sesión', href='/login')),
-                    dbc.NavItem(dbc.NavLink('Territoria', href='/territoria')),
-                    dbc.NavItem(dbc.NavLink('Sección Violeta', href='/seccionvioleta'))
+                    dbc.NavItem(dbc.NavLink('Iniciar sesión', href='/login'))
                 ], className='ms-auto', navbar=True),
                 id='navbar-collapse', navbar=True,
             )
@@ -117,19 +114,10 @@ layout = html.Div([
             dbc.Offcanvas(
                 [
                     html.P(
-                        'Territoria es un mapa que visualiza los datos oficiales de violencia de género a '
-                        'partir de las llamadas del 911 y la percepción de seguridad de las mujeres en el espacio '
-                        'público.'
+                        'Este mapa muestra registros oficiales y comprobados de violencia de género a '
+                        'partir de llamadas al 911. También, muestra una colección de percepciones acerca '
+                        'de la seguridad o inseguridad en los espacios públicos de Monterrey.'
                     ),
-                    html.P([
-                        'Conoce más sobre el proyecto ',
-                        html.A(
-                            'aquí',
-                            href='https://drive.google.com/file/d/19SiUAV-BB0WWd54x-h_HUlszXqKOTKcN/view?usp=sharing',
-                            target='_blank'
-                        ),
-                        '.'
-                    ]),
                     html.Hr(),
                     html.Div(switches_movil, id='radioitems-checklist-output'),
                     html.Div(
@@ -138,13 +126,13 @@ layout = html.Div([
                             href='https://t.me/monterrey_watchdog_bot',
                             target='_blank',
                             className='rounded d-inline-block px-4 py-2',
-                            style={'marginTop': '32px', 'backgroundColor': '#a876b1', 'color': 'white'}
+                            style={'marginTop': '32px', 'backgroundColor': '#24a2df', 'color': 'white'}
                         ),
                         className='text-center',
                     )
                 ],
                 id='offcanvas',
-                title='Territoria',
+                title='Mapa',
                 is_open=False,
                 placement='start'
             )
@@ -159,22 +147,10 @@ layout = html.Div([
 
         # Sidebar
         dbc.Col([
-            html.H4('Territoria', className='px-4 pt-3'),
-            html.P(
-                'Territoria es un mapa que visualiza los datos oficiales de violencia de género a '
-                'partir de las llamadas del 911 y la percepción de seguridad de las mujeres en el espacio '
-                'público.', className='px-4'
-            ),
-            html.P([
-                'Conoce más sobre el proyecto ',
-                html.A(
-                    'aquí',
-                    href='https://drive.google.com/file/d/19SiUAV-BB0WWd54x-h_HUlszXqKOTKcN/view?usp=sharing',
-                    target='_blank'
-                ),
-                '.'
-            ],
-                className='px-4'
+            html.H4('Mapa de Percepciones', className='px-4 pt-3'),
+            html.P('Este mapa muestra registros oficiales y comprobados de violencia de género a '
+                   'partir de llamadas al 911. También, muestra una colección de percepciones acerca '
+                   'de la seguridad o inseguridad en los espacios públicos de Monterrey.', className='px-4'
             ),
             html.Hr(),
             html.Div(
@@ -188,7 +164,7 @@ layout = html.Div([
                     href='https://t.me/monterrey_watchdog_bot',
                     target='_blank',
                     className='rounded d-inline-block px-4 py-2',
-                    style={'marginTop': '32px', 'backgroundColor': '#a876b1', 'color': 'white'}
+                    style={'marginTop': '32px', 'backgroundColor': '#24a2df', 'color': 'white'}
                 ),
                 className='text-center',
             )

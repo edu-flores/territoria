@@ -96,10 +96,8 @@ from pages import (
     index,
     password_recovery,
     sent_mail,
-    home,
-    territoria,
-    seccionvioleta,
-    page_not_found,
+    perceptions_map,
+    page_not_found
 )
 
 
@@ -219,11 +217,7 @@ def on_form_change(switches_value):
 @app.callback(Output('page-content', 'children'), Input('url', 'pathname'))
 def display_page(pathname):
     if pathname == '/':
-        return home.layout
-    if pathname == '/territoria':
-        return territoria.layout
-    if pathname == '/seccionvioleta':
-        return seccionvioleta.layout
+        return perceptions_map.layout
     if pathname == '/login':
         if 'user' in session:
             redirect('/index')
