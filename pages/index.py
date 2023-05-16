@@ -274,6 +274,16 @@ layout = dbc.Container([
     ),
 
     # Security records table
-    html.Div(id='table', className='table')
+    html.Div(dash_table.DataTable( id="table", 
+                                    columns=[],
+                                    data=[],
+                                    page_current= 0,
+                                    page_size=50,
+                                    cell_selectable=False,
+                                    style_as_list_view=True,
+                                    css=[dict(selector= 'p', rule= 'margin: 0; text-align: center ; margin-top:12px;'), dict(selector= 'a', rule= 'color:red;text-decoration:none')],
+                                    style_header={ 'border':'#57348E','fontFamily':'arial','textAlign':'center','color':'white', 'backgroundColor':'#57348E','font-size':'14px','fontWeight':'600'},
+                                    style_cell={'textAlign': 'center','fontFamily':'arial','font-size':'14px','fontWeight':'400'},
+                                    ))
 
 ], fluid=False)
