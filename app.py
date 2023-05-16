@@ -159,9 +159,6 @@ try:
 except mariadb.Error as e:
     print(f'Error connecting to MariaDB Platform: {e}')
 
-# Estaciones de Metro
-# estaciones_metro = pd.read_csv('assets/estaciones_metro.csv')
-
 # Reportes
 reportes = pd.read_csv('assets/reportes.csv')
 
@@ -179,7 +176,7 @@ percepciones_seguro = cur.fetchall()
 def on_form_change(switches_value):
 
     global mapa
-    mapa.update_traces(marker=dict(size=0, opacity=0), cluster=dict(enabled=False, size=0, opacity=0))
+    mapa.update_traces(overwrite=True, marker=dict(size=0, opacity=0), cluster=dict(enabled=False, size=0, opacity=0))
 
     # 911
     if 1 in switches_value:
