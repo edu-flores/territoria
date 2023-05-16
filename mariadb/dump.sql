@@ -1,6 +1,6 @@
 -- MariaDB dump 10.19  Distrib 10.11.2-MariaDB, for Win64 (AMD64)
 --
--- Host: localhost    Database: georregias
+-- Host: localhost    Database: kanan
 -- ------------------------------------------------------
 -- Server version	10.11.2-MariaDB
 
@@ -36,6 +36,11 @@ CREATE TABLE `admin` (
 
 LOCK TABLES `admin` WRITE;
 /*!40000 ALTER TABLE `admin` DISABLE KEYS */;
+INSERT INTO `admin` (`email`, `password`) VALUES
+('edu@gmail.com', SHA2('edu123', 256)),
+('sofia@gmail.com', SHA2('sofia123', 256)),
+('jp@gmail.com', SHA2('jp123', 256)),
+('fer@gmail.com', SHA2('fer123', 256));
 /*!40000 ALTER TABLE `admin` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -64,11 +69,35 @@ CREATE TABLE `record` (
 
 LOCK TABLES `record` WRITE;
 /*!40000 ALTER TABLE `record` DISABLE KEYS */;
+INSERT INTO `record` (`type`, `location`, `time`, `added_by`)
+SELECT 
+    IF(RAND() > 0.5, 'seguro', 'inseguro') AS `type`,
+    CONCAT(
+        ROUND(RAND() * (25.776393 - 25.568542) + 25.568542, 6),
+        ', ',
+        ROUND(RAND() * (-100.116441 - (-100.516758)) + (-100.516758), 6)
+    ) AS `location`,
+    CONCAT(
+        '2023-05-15 ',
+        LPAD(FLOOR(RAND() * 24), 2, '0'),
+        ':',
+        LPAD(FLOOR(RAND() * 60), 2, '0'),
+        ':',
+        LPAD(FLOOR(RAND() * 60), 2, '0')
+    ) AS `time`,
+    FLOOR(RAND() * 4) + 1 AS `added_by`
+FROM 
+    (SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9 UNION SELECT 10) a,
+    (SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5) b,
+    (SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5) c
+CROSS JOIN
+    (SELECT 1 UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9 UNION SELECT 10) d
+LIMIT 2500;
 /*!40000 ALTER TABLE `record` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Dumping routines for database 'georregias'
+-- Dumping routines for database 'kanan'
 --
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */ ;
