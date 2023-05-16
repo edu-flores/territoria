@@ -136,7 +136,7 @@ token = 'pk.eyJ1IjoianB6cDIwMDEiLCJhIjoiY2xmcmEzNnhyMDNjdDNycXQ0d3A2N3NjbyJ9.PUJ
 map_layout = dict(
     mapbox={
         'accesstoken': token,
-        'style': 'outdoors',
+        'style': 'streets',
         'zoom': 12,
         'center': dict(lat=25.675456439828732, lon=-100.31115409182688)
     },
