@@ -484,7 +484,7 @@ def toggle_filter_records_modal(n1, is_open):
 
 # Show records:  Shows the records in the table by default when accesing index but also when using filters
 @app.callback(
-    [Output('table', 'children'), Output('filter_records_modal','is_open')],
+    [ Output('table', 'data'), Output('table', 'columns'), Output('filter_records_modal','is_open')],
     [
         Input('filter_records_button', 'n_clicks'),
         State('type_filter', 'value'),
@@ -508,10 +508,13 @@ def show_records(n, type_filter, day_filter, month_filter, year_filter):
             (type_filter, day_filter, month_filter, year_filter),
         )
         data = cur.fetchall()
-        return create_table(data), False
+        dataa,columns=create_table(data)
+        return dataa,columns, False
     cur.execute('CALL obtain_records()')
     data = cur.fetchall()
-    return create_table(data), False
+    dataa,columns=create_table(data)
+    return dataa,columns, False
+
 
 
 # Add record form : Inserts the given information as a record in the db and shows succesful alert
@@ -548,31 +551,28 @@ def redirect_after_alert(change):
 
 # Returns the html table of the given data
 def create_table(data):
-    table_records = []
-    table_headers = html.Tr(
-        [
-            html.Th('id'),
-            html.Th('Tipo'),
-            html.Th('Ubicación'),
-            html.Th('Fecha de admisión'),
-            html.Th('Registrado por'),
-            html.Th('Eliminar'),
-        ]
-    )
-    for record in data:
-        record_cols = [html.Td(str(col)) for col in record]
-        # link_col = html.Td(html.A('Eliminar',id='delete_record_button',className='delete_record_btn',href='/delete_record/%s' % (str(record[0]))))
-        link_col = html.Td(
-            html.A(
-                'X',
-                n_clicks=0,
-                className='delete_record_btn',
-                href='delete_record/%s' % (str(record[0])),
-            )
-        )
-        table_records.append(html.Tr(record_cols + [link_col]))
-    table = html.Table([html.Thead(table_headers), html.Tbody(table_records)], className='table')
-    return table
+    columns = [
+        {"name": "id", "id": "id"},
+        {"name": "Tipo", "id": "type"},
+        {"name": "Ubicación", "id": "location"},
+        {"name": "Fecha de admisión", "id": "time"},
+        {"name": "Registrado por", "id": "added_by"},
+        {"name": "Eliminar", "id": "delete", "presentation": "markdown"}
+
+    ]
+    result = []
+    for row in data:
+        row_dict = dict(zip([desc[0] for desc in cur.description], row))
+        result.append({
+            "id": row_dict["id"],
+            "type":row_dict['type'],
+            "location": row_dict["location"],
+            "time":row_dict["time"],
+            "added_by": row_dict["added_by"],
+            "delete": f"[X](delete_record/{row_dict['id']})"
+
+        })
+    return result, columns
 
 
 # Sign out :  When user clicks 'close session', the session variable is popped and the user is redirected to login
