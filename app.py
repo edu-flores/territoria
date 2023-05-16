@@ -161,67 +161,79 @@ except mariadb.Error as e:
 
 # Reportes
 reportes = pd.read_csv('assets/reportes.csv')
+mapa.add_scattermapbox(
+    name='911',
+    lat=reportes['latitud'],
+    lon=reportes['longitud'],
+    marker={'size': 6, 'opacity': .1, 'color': '#4974a5'},
+    hoverinfo='none',
+    cluster={
+        'enabled': False
+    }
+)
 
 # Percepciones - Espacio inseguro y de peligro
 cur.execute("SELECT SUBSTRING_INDEX(location,',', 1) AS lat, SUBSTR(location, POSITION(',' IN  location)+2, LENGTH(location)) AS lon FROM record WHERE type='inseguro' AND time >= DATE_SUB(NOW(), INTERVAL 3 MONTH);")
 percepciones = cur.fetchall()
+mapa.add_scattermapbox(
+    name='unsafe',
+    lat=list(map(lambda x: x[0], percepciones)),
+    lon=list(map(lambda x: x[1], percepciones)),
+    marker={'size': 14, 'opacity': .7, 'color': '#A97BB5'},
+    hoverinfo='none',
+    cluster={
+        'enabled': True,
+        'size': [12, 15, 18, 21, 24, 27, 30, 33, 36, 39, 42, 45, 48, 51, 54, 57, 60, 69, 78],
+        "step": [60, 120, 180, 240, 300, 360, 420, 480, 540, 600, 660, 720, 780, 840, 900, 960, 1020, 2100,
+                    5200],
+        'color': '#A97BB5',
+        'opacity': .3
+    }
+)
 
 # Percepciones - Espacio seguro
 cur.execute("SELECT SUBSTRING_INDEX(location,',', 1) AS lat, SUBSTR(location, POSITION(',' IN  location)+2, LENGTH(location)) AS lon FROM record WHERE type='seguro' AND time >= DATE_SUB(NOW(), INTERVAL 3 MONTH);")
 percepciones_seguro = cur.fetchall()
+mapa.add_scattermapbox(
+    name='safe',
+    lat=list(map(lambda x: x[0], percepciones_seguro)),
+    lon=list(map(lambda x: x[1], percepciones_seguro)),
+    marker={'size': 14, 'opacity': .7, 'color': '#8bb77f'},
+    hoverinfo='none',
+    cluster={
+        'enabled': True,
+        'size': [12, 15, 18, 21, 24, 27, 30, 33, 36, 39, 42, 45, 48, 51, 54, 57, 60, 69, 78],
+        "step": [60, 120, 180, 240, 300, 360, 420, 480, 540, 600, 660, 720, 780, 840, 900, 960, 1020, 2100,
+                    5200],
+        'color': '#8bb77f',
+        'opacity': .3
+    }
+)
+
 
 # Map - Callback
 @app.callback(Output('mapa-movil', 'figure'), [Input('switches-input-movil', 'value')])
 @app.callback(Output('mapa-desktop', 'figure'), [Input('switches-input-desktop', 'value')])
 def on_form_change(switches_value):
 
-    global mapa
-    mapa.update_traces(overwrite=True, visible=False)
+    mapa.for_each_trace(lambda trace: trace.update(marker=dict(opacity=0), cluster=dict(enabled=False, opacity=0)))
 
     # 911
     if 1 in switches_value:
-        mapa.add_scattermapbox(
-            lat=reportes['latitud'],
-            lon=reportes['longitud'],
-            marker={'size': 6, 'opacity': .1, 'color': '#4974a5'},
-            hoverinfo='none',
-            cluster={
-                'enabled': False
-            }
+        mapa.for_each_trace(
+            lambda trace: trace.update(marker=dict(opacity=.1), cluster=dict(enabled=False, opacity=0)) if trace.name == '911' else (),
         )
 
     # Espacios inseguros
     if 2 in switches_value:
-        mapa.add_scattermapbox(
-            lat=list(map(lambda x: x[0], percepciones)),
-            lon=list(map(lambda x: x[1], percepciones)),
-            marker={'size': 14, 'opacity': .7, 'color': '#A97BB5'},
-            hoverinfo='none',
-            cluster={
-                'enabled': True,
-                'size': [12, 15, 18, 21, 24, 27, 30, 33, 36, 39, 42, 45, 48, 51, 54, 57, 60, 69, 78],
-                "step": [60, 120, 180, 240, 300, 360, 420, 480, 540, 600, 660, 720, 780, 840, 900, 960, 1020, 2100,
-                         5200],
-                'color': '#A97BB5',
-                'opacity': .3
-            }
+        mapa.for_each_trace(
+            lambda trace: trace.update(marker=dict(opacity=.7), cluster=dict(enabled=True, opacity=.3)) if trace.name == 'unsafe' else (),
         )
 
     # Espacios seguros
     if 3 in switches_value:
-        mapa.add_scattermapbox(
-            lat=list(map(lambda x: x[0], percepciones_seguro)),
-            lon=list(map(lambda x: x[1], percepciones_seguro)),
-            marker={'size': 14, 'opacity': .7, 'color': '#8bb77f'},
-            hoverinfo='none',
-            cluster={
-                'enabled': True,
-                'size': [12, 15, 18, 21, 24, 27, 30, 33, 36, 39, 42, 45, 48, 51, 54, 57, 60, 69, 78],
-                "step": [60, 120, 180, 240, 300, 360, 420, 480, 540, 600, 660, 720, 780, 840, 900, 960, 1020, 2100,
-                         5200],
-                'color': '#8bb77f',
-                'opacity': .3
-            }
+        mapa.for_each_trace(
+            lambda trace: trace.update(marker=dict(opacity=.7), cluster=dict(enabled=True, opacity=.3)) if trace.name == 'safe' else (),
         )
 
     return mapa
