@@ -176,7 +176,7 @@ percepciones_seguro = cur.fetchall()
 def on_form_change(switches_value):
 
     global mapa
-    mapa.update_traces(overwrite=True, marker=dict(size=0, opacity=0), cluster=dict(enabled=False, size=0, opacity=0))
+    mapa.update_traces(overwrite=True, visible=False)
 
     # 911
     if 1 in switches_value:
