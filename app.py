@@ -136,7 +136,7 @@ token = 'pk.eyJ1IjoianB6cDIwMDEiLCJhIjoiY2xmcmEzNnhyMDNjdDNycXQ0d3A2N3NjbyJ9.PUJ
 map_layout = dict(
     mapbox={
         'accesstoken': token,
-        'style': 'light',
+        'style': 'outdoors',
         'zoom': 12,
         'center': dict(lat=25.675456439828732, lon=-100.31115409182688)
     },
@@ -147,6 +147,8 @@ map_layout = dict(
                          'resetscale', 'resetview']),
     hoverlabel_bgcolor='#000000'
 )
+mapa = go.Figure(go.Scattermapbox())
+mapa.update_layout(map_layout)
 
 # Connect to MariaDB Platform
 try:
@@ -171,15 +173,13 @@ percepciones = cur.fetchall()
 cur.execute("SELECT SUBSTRING_INDEX(location,',', 1) AS lat, SUBSTR(location, POSITION(',' IN  location)+2, LENGTH(location)) AS lon FROM record WHERE type='seguro' AND time >= DATE_SUB(NOW(), INTERVAL 3 MONTH);")
 percepciones_seguro = cur.fetchall()
 
-mapa = go.Figure(go.Scattermapbox())
-mapa.update_layout(map_layout)
-
 # Map - Callback
 @app.callback(Output('mapa-movil', 'figure'), [Input('switches-input-movil', 'value')])
 @app.callback(Output('mapa-desktop', 'figure'), [Input('switches-input-desktop', 'value')])
 def on_form_change(switches_value):
 
-    mapa = go.Figure(go.Scattermapbox())
+    global mapa
+    mapa.update_traces(marker=dict(size=0, opacity=0), cluster=dict(enabled=False, size=0, opacity=0))
 
     # 911
     if 1 in switches_value:
@@ -187,7 +187,10 @@ def on_form_change(switches_value):
             lat=reportes['latitud'],
             lon=reportes['longitud'],
             marker={'size': 6, 'opacity': .1, 'color': '#4974a5'},
-            hoverinfo='none'
+            hoverinfo='none',
+            cluster={
+                'enabled': False
+            }
         )
 
     # Espacios inseguros
@@ -196,7 +199,15 @@ def on_form_change(switches_value):
             lat=list(map(lambda x: x[0], percepciones)),
             lon=list(map(lambda x: x[1], percepciones)),
             marker={'size': 14, 'opacity': .7, 'color': '#A97BB5'},
-            hoverinfo='none'
+            hoverinfo='none',
+            cluster={
+                'enabled': True,
+                'size': [12, 15, 18, 21, 24, 27, 30, 33, 36, 39, 42, 45, 48, 51, 54, 57, 60, 69, 78],
+                "step": [60, 120, 180, 240, 300, 360, 420, 480, 540, 600, 660, 720, 780, 840, 900, 960, 1020, 2100,
+                         5200],
+                'color': '#A97BB5',
+                'opacity': .3
+            }
         )
 
     # Espacios seguros
@@ -205,10 +216,17 @@ def on_form_change(switches_value):
             lat=list(map(lambda x: x[0], percepciones_seguro)),
             lon=list(map(lambda x: x[1], percepciones_seguro)),
             marker={'size': 14, 'opacity': .7, 'color': '#8bb77f'},
-            hoverinfo='none'
+            hoverinfo='none',
+            cluster={
+                'enabled': True,
+                'size': [12, 15, 18, 21, 24, 27, 30, 33, 36, 39, 42, 45, 48, 51, 54, 57, 60, 69, 78],
+                "step": [60, 120, 180, 240, 300, 360, 420, 480, 540, 600, 660, 720, 780, 840, 900, 960, 1020, 2100,
+                         5200],
+                'color': '#8bb77f',
+                'opacity': .3
+            }
         )
 
-    mapa.update_layout(map_layout)
     return mapa
 
 #ACCESING PAGES
