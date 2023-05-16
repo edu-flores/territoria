@@ -48,7 +48,7 @@ switches_desktop = html.Div([
 # Map's title
 info_icon = html.I(className='fas fa-info-circle', style=dict(display='inline-block'))
 
-btn_text = html.Div('Mapa de Percepciones', style=dict(paddingLeft='2vw', display='inline-block'))
+btn_text = html.Div('Kanan - Mapa', style=dict(paddingLeft='2vw', display='inline-block'))
 
 map_title = html.Span([info_icon, btn_text])
 
@@ -70,7 +70,7 @@ layout = html.Div([
 
             html.A(
                 dbc.Row(
-                    dbc.Col(html.Img(src='assets/georregias_logo.jpeg', height='30px')),
+                    dbc.Col(html.Img(src='assets/logo.jpeg', height='30px')),
                     align='center', className='g-0'
                 ), href='/'
             ),
@@ -147,7 +147,7 @@ layout = html.Div([
 
         # Sidebar
         dbc.Col([
-            html.H4('Mapa de Percepciones', className='px-4 pt-3'),
+            html.H4('Kanan - Mapa', className='px-4 pt-3'),
             html.P('Este mapa muestra registros oficiales y comprobados de violencia de género a '
                    'partir de llamadas al 911. También, muestra una colección de percepciones acerca '
                    'de la seguridad o inseguridad en los espacios públicos de Monterrey.', className='px-4'

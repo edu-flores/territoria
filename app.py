@@ -136,7 +136,7 @@ token = 'pk.eyJ1IjoianB6cDIwMDEiLCJhIjoiY2xmcmEzNnhyMDNjdDNycXQ0d3A2N3NjbyJ9.PUJ
 map_layout = dict(
     mapbox={
         'accesstoken': token,
-        'style': 'outdoors',
+        'style': 'light',
         'zoom': 12,
         'center': dict(lat=25.675456439828732, lon=-100.31115409182688)
     },
@@ -151,7 +151,7 @@ map_layout = dict(
 # Connect to MariaDB Platform
 try:
     conn = mariadb.connect(
-        user='root', password='root', host='localhost', port=3307, database='georregias'
+        user='root', password='root', host='localhost', port=3307, database='kanan'
     )
     cur = conn.cursor()
 except mariadb.Error as e:
@@ -606,14 +606,13 @@ def send_recovery_mail(n_clicks, email):
         data= cur.fetchone()
         if data[0]!=0:
             token=get_token(data[1])
-            msg = Message("Cambio de contraseña - Georregias",recipients=[data[0]],sender=("Georregias", "territoriamtyy@gmail.com"))
+            msg = Message("Cambio de contraseña - Kanan", recipients=[data[0]], sender=("Kanan", "territoriamtyy@gmail.com"))
             msg.body = f"""Hola {email},\n\n
                         Para cambiar tu contraseña, por favor da click en el siguiente enlace:\n
                         {url_for('restore_password',token=token,_external=True)}\n
                         El enlace vencerá después de 10 minutos.\n
                         Si no solicitaste un cambio de contraseña, por favor ignora este mensaje.\n\n
-                        Saludos,
-                        Georregias
+                        Saludos
                         """
             mail.send(msg)
             return True,True

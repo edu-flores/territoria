@@ -14,7 +14,7 @@ layout = dbc.Container([
 
             html.A(
                 dbc.Row(
-                    dbc.Col(html.Img(src='assets/georregias_logo.jpeg', height='30px')),
+                    dbc.Col(html.Img(src='assets/logo.jpeg', height='30px')),
                     align='center', className='g-0'
                 ), href='/'
             ),
