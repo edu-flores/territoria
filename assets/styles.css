@@ -296,6 +296,11 @@ i{
 .template_label{
     margin-bottom:8px;
 }
+
+img{
+    width: 120px;
+    height:40px;
+}
 /*MEDIA QUERIES*/
 
 /*LOGIN*/
