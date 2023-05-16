@@ -1,4 +1,4 @@
-## Perceptions Map
+## Kanan - Perceptions map
 
 ![alt text](assets/mapa.png)
 
