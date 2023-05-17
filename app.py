@@ -216,24 +216,31 @@ mapa.add_scattermapbox(
 @app.callback(Output('mapa-desktop', 'figure'), [Input('switches-input-desktop', 'value')])
 def on_form_change(switches_value):
 
-    mapa.for_each_trace(lambda trace: trace.update(marker=dict(opacity=0), cluster=dict(enabled=False, opacity=0)))
+    traces = [trace.name for trace in mapa.data]
+    if '911' in traces and 'unsafe' in traces and 'safe' in traces:
+        mapa.for_each_trace(lambda trace: trace.update(marker=dict(opacity=0), cluster=dict(enabled=False, opacity=0)))
+    else:
+        return mapa
 
     # 911
-    if 1 in switches_value:
+    if 1 in switches_value and '911' in traces:
         mapa.for_each_trace(
-            lambda trace: trace.update(marker=dict(opacity=.1), cluster=dict(enabled=False, opacity=0)) if trace.name == '911' else (),
+            lambda trace: trace.update(marker=dict(opacity=.1), cluster=dict(enabled=False, opacity=0)),
+            selector=dict(name='911')
         )
 
     # Espacios inseguros
-    if 2 in switches_value:
+    if 2 in switches_value and 'unsafe' in traces:
         mapa.for_each_trace(
-            lambda trace: trace.update(marker=dict(opacity=.7), cluster=dict(enabled=True, opacity=.3)) if trace.name == 'unsafe' else (),
+            lambda trace: trace.update(marker=dict(opacity=.7), cluster=dict(enabled=True, opacity=.3)),
+            selector=dict(name='unsafe')
         )
 
     # Espacios seguros
-    if 3 in switches_value:
+    if 3 in switches_value and 'safe' in traces:
         mapa.for_each_trace(
-            lambda trace: trace.update(marker=dict(opacity=.7), cluster=dict(enabled=True, opacity=.3)) if trace.name == 'safe' else (),
+            lambda trace: trace.update(marker=dict(opacity=.7), cluster=dict(enabled=True, opacity=.3)),
+            selector=dict(name='safe')
         )
 
     return mapa
