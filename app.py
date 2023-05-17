@@ -165,7 +165,7 @@ mapa.add_scattermapbox(
     name='911',
     lat=reportes['latitud'],
     lon=reportes['longitud'],
-    marker={'size': 6, 'opacity': .1, 'color': '#4974a5'},
+    marker={'size': 6, 'opacity': 0, 'color': '#4974a5'},
     hoverinfo='none',
     cluster={
         'enabled': False
@@ -179,7 +179,7 @@ mapa.add_scattermapbox(
     name='unsafe',
     lat=list(map(lambda x: x[0], percepciones)),
     lon=list(map(lambda x: x[1], percepciones)),
-    marker={'size': 14, 'opacity': .7, 'color': '#A97BB5'},
+    marker={'size': 14, 'opacity': 0, 'color': '#A97BB5'},
     hoverinfo='none',
     cluster={
         'enabled': True,
@@ -187,7 +187,7 @@ mapa.add_scattermapbox(
         "step": [60, 120, 180, 240, 300, 360, 420, 480, 540, 600, 660, 720, 780, 840, 900, 960, 1020, 2100,
                     5200],
         'color': '#A97BB5',
-        'opacity': .3
+        'opacity': 0
     }
 )
 
@@ -198,7 +198,7 @@ mapa.add_scattermapbox(
     name='safe',
     lat=list(map(lambda x: x[0], percepciones_seguro)),
     lon=list(map(lambda x: x[1], percepciones_seguro)),
-    marker={'size': 14, 'opacity': .7, 'color': '#8bb77f'},
+    marker={'size': 14, 'opacity': 0, 'color': '#8bb77f'},
     hoverinfo='none',
     cluster={
         'enabled': True,
@@ -206,7 +206,7 @@ mapa.add_scattermapbox(
         "step": [60, 120, 180, 240, 300, 360, 420, 480, 540, 600, 660, 720, 780, 840, 900, 960, 1020, 2100,
                     5200],
         'color': '#8bb77f',
-        'opacity': .3
+        'opacity': 0
     }
 )
 
@@ -216,31 +216,24 @@ mapa.add_scattermapbox(
 @app.callback(Output('mapa-desktop', 'figure'), [Input('switches-input-desktop', 'value')])
 def on_form_change(switches_value):
 
-    traces = [trace.name for trace in mapa.data]
-    if '911' in traces and 'unsafe' in traces and 'safe' in traces:
-        mapa.for_each_trace(lambda trace: trace.update(marker=dict(opacity=0), cluster=dict(enabled=False, opacity=0)))
-    else:
-        return mapa
+    mapa.for_each_trace(lambda trace: trace.update(marker=dict(opacity=0), cluster=dict(enabled=False, opacity=0)))
 
     # 911
-    if 1 in switches_value and '911' in traces:
+    if 1 in switches_value:
         mapa.for_each_trace(
-            lambda trace: trace.update(marker=dict(opacity=.1), cluster=dict(enabled=False, opacity=0)),
-            selector=dict(name='911')
+            lambda trace: trace.update(marker=dict(opacity=.1), cluster=dict(enabled=False, opacity=0)) if trace.name == '911' else (),
         )
 
     # Espacios inseguros
-    if 2 in switches_value and 'unsafe' in traces:
+    if 2 in switches_value:
         mapa.for_each_trace(
-            lambda trace: trace.update(marker=dict(opacity=.7), cluster=dict(enabled=True, opacity=.3)),
-            selector=dict(name='unsafe')
+            lambda trace: trace.update(marker=dict(opacity=.7), cluster=dict(enabled=True, opacity=.3)) if trace.name == 'unsafe' else (),
         )
 
     # Espacios seguros
-    if 3 in switches_value and 'safe' in traces:
+    if 3 in switches_value:
         mapa.for_each_trace(
-            lambda trace: trace.update(marker=dict(opacity=.7), cluster=dict(enabled=True, opacity=.3)),
-            selector=dict(name='safe')
+            lambda trace: trace.update(marker=dict(opacity=.7), cluster=dict(enabled=True, opacity=.3)) if trace.name == 'safe' else (),
         )
 
     return mapa
@@ -654,6 +647,6 @@ def send_recovery_mail(n_clicks, email):
     return True,False
 
 if __name__ == '__main__':
-    app.run_server(debug=True)
+    app.run_server(debug=True, use_reloader=False)
 
 conn.close()
