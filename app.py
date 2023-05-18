@@ -37,6 +37,7 @@ app = Dash(__name__,
            )
 
 # Secret key
+server = app.server
 app.server.secret_key = 'purpleMap'
 
 # App server configs
