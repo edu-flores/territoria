@@ -4,5 +4,4 @@ dash-bootstrap-components==1.3.0
 gunicorn
 ItsDangerous
 Flask-Mail
-libmariadb-dev
 mariadb
