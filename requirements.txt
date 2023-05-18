@@ -5,4 +5,4 @@ gunicorn
 mariadb
 ItsDangerous
 Flask-Mail
-MySQL-python
+MySQL-python==3.3.1
